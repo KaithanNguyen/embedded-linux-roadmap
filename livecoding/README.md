@@ -1,8 +1,10 @@
 # Live coding
-Luyện phỏng vấn Embedded C/C++: giải bài trong timebox, nói to suy nghĩ, tự viết test, không AI và không search.
-Khác với [C/C++ foundation](../c-cpp-foundation/README.md) (hiểu sâu bằng thí nghiệm), phần này luyện khả năng lấy lại kiến thức nhanh và giao tiếp dưới áp lực thời gian.
+Luyện code có timebox cho các bài đặc trưng của Embedded C/C++: giải bài trong thời gian giới hạn, nói to cách nghĩ, tự viết test, không AI và không search.
+Khác với [C/C++ foundation](../c-cpp-foundation/README.md) (hiểu sâu bằng thí nghiệm) và [LeetCode](../leetcode/README.md) (thuật toán tổng quát), phần này luyện các bài gần với driver và firmware: bit, buffer, protocol, bộ nhớ, đồng thời.
 
-## Quy trình một session — 45 phút
+Nhịp: 1 session timebox mỗi tuần (có thể thay cho một bài LeetCode); 1 mini project 90 phút cùng AI mỗi tháng.
+
+## Session timebox — 45 phút
 1. 5 phút — Làm rõ đề: input/output, contract (null, size 0, overflow), ràng buộc (có được dùng heap? gọi từ ISR?). Ghi câu hỏi và giả định.
 2. 5 phút — Nêu approach, complexity và test cases trước khi code.
 3. 20 phút — Code trong editor không có AI completion; nói to khi code.
@@ -15,7 +17,14 @@ Quy tắc:
 - Giữ nguyên code viết trong timebox; bản sửa sau timebox để file riêng (`fixed.c`) để so sánh trung thực.
 - Làm lại cùng bài sau 1 ngày, 1 tuần, 1 tháng; chỉ tính Done khi lần làm lại đạt ≥ 11/14 không có gợi ý.
 
-Nhịp đề xuất: từ 11/2026 một session mỗi tuần; từ 04/2027 hai đến ba session mỗi tuần, cộng một buổi mock có người hỏi.
+## Mini project 90 phút cùng AI — mỗi tháng
+Luyện dùng AI có kiểm chứng: AI viết bản nháp, mình chịu trách nhiệm về độ đúng.
+1. 15 phút — Tự ra đề: spec + acceptance criteria trước khi mở AI (ví dụ: daemon đọc IIO và ghi CSV có xoay vòng file).
+2. 30 phút — Để AI sinh bản nháp; đọc hiểu từng phần trước khi chạy.
+3. 30 phút — Đối chiếu register/bit với datasheet; kiểm tra timing, ownership bộ nhớ, error path; chạy test (trên board nếu liên quan phần cứng).
+4. 15 phút — Review từng dòng; ghi lỗi của AI vào [AI error log](../docs/ai-error-log.md).
+
+Lưu tại `attempts/YYYY-MM-DD_MPxx/`: spec, code, test, ghi chú review.
 
 ## Lưu attempt
 Folder `attempts/YYYY-MM-DD_LCxx/`: `session.md` (copy từ template), source, test. Không commit lời giải lấy từ nguồn khác.
@@ -28,11 +37,11 @@ Folder `attempts/YYYY-MM-DD_LCxx/`: `session.md` (copy từ template), source, t
 | Code quality | Khó đọc | Đọc được | Tên rõ, hàm nhỏ, const đúng chỗ, không magic number |
 | Embedded awareness | Bỏ qua | Có nhắc đến | Xử lý đúng: heap, alignment, endianness, ISR/concurrency, volatile |
 | Testing | Không test | Chỉ test case thường | Tự viết normal/boundary/error |
-| Communication | Im lặng | Giải thích khi được hỏi | Nói to, nêu trade-off |
+| Communication | Im lặng | Giải thích khi được yêu cầu | Nói to, nêu trade-off |
 | Time | > 60 phút | 45–60 phút | ≤ 45 phút |
 
 ## Problem bank
-Đề chi tiết (signature, câu hỏi làm rõ, test bắt buộc, follow-up) ở [problems.md](problems.md).
+Đề chi tiết (signature, câu hỏi làm rõ, test bắt buộc, câu hỏi mở rộng) ở [problems.md](problems.md).
 
 | ID | Bài | Focus | Level | Attempts | Best | Status |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -58,6 +67,6 @@ Folder `attempts/YYYY-MM-DD_LCxx/`: `session.md` (copy từ template), source, t
 | LC20 | Linux `tail -n` bằng syscall | read/lseek, error handling | Medium | 0 | — | Not started |
 
 ## Attempt log
-| Ngày | Problem | Thời gian | Điểm | Có gợi ý? | Session |
+| Ngày | Problem / mini project | Thời gian | Điểm | Có gợi ý? | Session |
 | --- | --- | --- | --- | --- | --- |
 | Chưa có | — | — | — | — | — |

@@ -39,8 +39,8 @@ Câu hỏi tôi đã hỏi (hoặc lẽ ra phải hỏi) và contract đã chố
 | Time | | |
 | Tổng | /14 | |
 
-## Follow-up questions
-Câu interviewer có thể hỏi và câu trả lời của tôi (không tra cứu):
+## Câu hỏi mở rộng
+Các câu "Mở rộng" của bài trong problems.md và câu trả lời của tôi (không tra cứu):
 
 ## Làm lại
 Ngày làm lại tiếp theo + 1 điều cần cải thiện:

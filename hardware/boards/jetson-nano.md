@@ -1,26 +1,30 @@
 # Jetson Nano — board profile
-Model: Jetson Nano Developer Kit bản gốc (Tegra X1).
-Status: Thông số chi tiết chưa xác minh trên board thật.
+Model: Jetson Nano Developer Kit bản gốc (Tegra X1), bản 4GB.
+Status: Thông số chi tiết chưa xác minh trên board thật. Bắt đầu dùng: 04/2027 (networking, camera, AI).
 
 ## Tổng quan
 | Mục | Giá trị cần xác minh | Đã xác minh? | Nguồn + version |
 | --- | --- | --- | --- |
-| Module / carrier | TODO: revision carrier (A02/B01), bản 4GB hay 2GB | ☐ | — |
+| Module / carrier | TODO: revision carrier (A02/B01) | ☐ | — |
 | SoC | NVIDIA Tegra X1 (T210) | ☐ | — |
 | CPU | 4× Arm Cortex-A57 | ☐ | — |
-| GPU | 128-core Maxwell (CUDA) | ☐ | — |
-| RAM | 4 GB LPDDR4 (có bản 2 GB) | ☐ | — |
+| GPU | 128-core Maxwell (CUDA); encoder video phần cứng | ☐ | — |
+| RAM | 4 GB LPDDR4 | ☐ | — |
+| Storage | microSD ≥ 64 GB | ☐ | — |
+| Mạng | Ethernet; không có Wi-Fi sẵn | ☐ | — |
+| Tản nhiệt | Nên gắn quạt khi chạy GPU/encoder lâu | ☐ | — |
 | Boot media | Bootloader trong QSPI-NOR; rootfs trên microSD | ☐ | — |
 | Nguồn | micro-USB 5V⎓2A, hoặc DC barrel 5V⎓4A khi gắn jumper J48 | ☐ | — |
 | Power mode | `nvpmodel`: 10W (MAXN) / 5W | ☐ | — |
 | Console | Debug UART trên carrier (vị trí header khác giữa A02 và B01), cần USB-UART 3.3V; micro-USB device mode cho `/dev/ttyACM*` sau khi boot | ☐ | — |
-| Camera | MIPI CSI-2 (B01 có 2 connector) hoặc USB camera | ☐ | — |
+| Camera | MIPI CSI-2 (B01 có 2 connector): Raspberry Pi camera v2 (IMX219) chạy sẵn với JetPack, camera v3 không được hỗ trợ sẵn; hoặc webcam USB | ☐ | — |
 | Mở rộng | 40-pin header bố cục tương tự Raspberry Pi, logic 3.3V | ☐ | — |
 
 ## Software stack và giới hạn
 - JetPack 4.6.x là dòng cuối hỗ trợ Jetson Nano: L4T R32.7.x, Ubuntu 18.04, Linux kernel 4.9, CUDA 10.2. Không có JetPack 5/6 cho Nano.
 - Hệ quả: GCC 7 mặc định (C++17 phần lớn được hỗ trợ, C++20 thì không), Python 3.6, package cũ. Ghi rõ khi một lab phải dùng bản backport.
 - Flash bằng SDK Manager cần host Ubuntu 18.04 (hoặc container); cách đơn giản hơn là ghi SD card image.
+- Tài liệu: [JetPack 4.6.1](https://developer.nvidia.com/embedded/jetpack-sdk-461); [jetson-inference](https://github.com/dusty-nv/jetson-inference) cho phần nhận dạng.
 
 Ghi version thực tế: `cat /etc/nv_tegra_release`, `uname -a`, `dpkg -l | grep nvidia-l4t-core`.
 
@@ -28,7 +32,7 @@ Ghi version thực tế: `cat /etc/nv_tegra_release`, `uname -a`, `dpkg -l | gre
 BootROM → các stage bootloader NVIDIA trong QSPI-NOR → U-Boot (đọc `/boot/extlinux/extlinux.conf`) → Linux kernel → systemd.
 Đây là sơ đồ khái quát. Xác minh bằng boot log thật và ghi lại chỗ khác biệt.
 
-## Bring-up checklist (M0)
+## Bring-up checklist (04/2027)
 - [ ] Xác định model/revision từ nhãn trên module và carrier.
 - [ ] Ghi SD card image JetPack 4.6.x (tên file + checksum); dùng `lsblk` xác minh thẻ trước khi ghi.
 - [ ] Chọn nguồn: barrel 5V⎓4A + jumper J48 khi dùng camera/GPU; ghi adapter.

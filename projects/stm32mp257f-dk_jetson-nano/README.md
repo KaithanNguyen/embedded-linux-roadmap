@@ -1,98 +1,113 @@
-# Project: Event-triggered edge capture — STM32MP257F-DK + Jetson Nano
-Status: Planned — chưa có code/evidence. Scope bên dưới là đề xuất; chốt ở M0.
+# Project: Edge sensor + camera — STM32MP257F-DK + Jetson Nano
+Status: Planned — chưa có code/evidence. Scope bên dưới là đề xuất; mỗi quyết định được chốt bằng một [ADR](../../docs/adr/README.md).
 
 ## Problem and users
-Thiết bị hiện trường (camera an ninh, body camera, máy công nghiệp) cần lưu đoạn video trước và sau một sự kiện, kèm timestamp tin cậy và bằng chứng toàn vẹn dữ liệu.
-Project tách vai trò: STM32MP257F-DK phát hiện sự kiện từ sensor/GPIO; Jetson Nano giữ buffer camera và lưu clip khi nhận sự kiện.
-Người dùng: kỹ sư vận hành cần clip + metadata để điều tra sự cố.
-Lý do làm: đi hết chuỗi Embedded Linux (peripheral → protocol → service → image → đo đạc) trên hai BSP khác nhau.
+Thiết bị hiện trường cần ghi lại video quanh một sự kiện chuyển động (rung, rơi), với timestamp đồng bộ giữa các node, dữ liệu toàn vẹn và chịu được mất điện đột ngột.
+STM32MP257F-DK là node real-time: Cortex-M33 lấy mẫu LSM6DSOX và điều khiển LED/buzzer; Linux trên Cortex-A35 chạy service phát hiện sự kiện và gửi dữ liệu.
+Jetson Nano là gateway và lo phần camera: nhận dữ liệu qua Ethernet, giữ buffer video trước sự kiện, ghi clip bằng encoder phần cứng, nhận dạng bằng GPU.
+Người dùng: kỹ sư vận hành cần clip + dữ liệu chuyển động để điều tra sự cố.
 
-## Scope
-In scope: đọc sensor I2C + nút GPIO trên STM32MP2; giao thức event qua Ethernet; pre-event buffer và ghi clip trên Jetson; systemd service; image STM32MP2 build bằng Yocto; đo latency và test lỗi.
-Out of scope: cloud upload, UI, mã hóa clip, OTA update, chứng nhận an toàn.
-Stretch (chỉ làm khi core đạt gate): firmware Cortex-M33 lấy mẫu sensor + RPMsg; inference trên Jetson (TensorRT) hoặc NPU của STM32MP2; PTP thay NTP.
+## Các phần và thời gian
+| Phần | Thời gian | Nội dung | Output |
+| --- | --- | --- | --- |
+| Nền BSP + driver | 11/2026–03/2027 | Boot, U-Boot, device tree, kernel; LSM6DSOX qua I2C/SPI/IIO; driver IIO tự viết; image Yocto | Cổng 1 trong [roadmap](../../ROADMAP.md#hai-cổng) |
+| Mini project 1 — Network | 04/2027 | MP257F gửi dữ liệu LSM6DSOX sang Jetson rồi về máy host; TCP và UDP, đánh giá MQTT (Mosquitto trên Jetson); đo độ trễ và mất gói bằng Wireshark; thêm TLS | Báo cáo latency/loss; ADR transport |
+| Mini project 2 — Camera | 05/2027 | Pipeline GStreamer có encoder phần cứng; video + dữ liệu chuyển động đồng bộ timestamp; sự kiện rung/rơi kích hoạt ghi clip có pre-event; event nhận dạng từ Jetson bật LED/buzzer trên MP257F | Clip + metadata + SHA-256 |
+| Tích hợp + độ bền | 06/2027 | Firmware M33 lấy mẫu LSM6DSOX, gửi lên Linux qua RPMsg; OTA A/B; watchdog; test rút nguồn; CI deploy lên hai board; README + video demo | Cổng 2 |
+| Mở rộng | 07–09/2027 | Secure boot, ký firmware, threat model (STRIDE); model AI trên GPU Jetson hoặc NPU MP257F có số đo | Threat model, báo cáo đo |
 
 ## Architecture (draft)
 ```mermaid
 flowchart LR
-  subgraph MP2["STM32MP257F-DK — OpenSTLinux"]
-    SEN["I2C sensor"] --> SVC["sensor-svc (C)"]
-    BTN["GPIO button"] --> SVC
-    SVC --> Q[("event queue")]
+  subgraph MP2["STM32MP257F-DK"]
+    IMU["LSM6DSOX"] --> M33["Cortex-M33 firmware"]
+    M33 --> LED["LED / buzzer"]
+    M33 -- "RPMsg: mẫu IMU" --> SVC["sensor-svc (A35, Linux)"]
+    SVC -- "RPMsg: lệnh" --> M33
   end
   subgraph JN["Jetson Nano — L4T R32.7"]
     RX["event-rx"] --> REC["recorder"]
-    CAM["CSI/USB camera"] --> PRE[("pre-event buffer")]
+    CAM["Camera IMX219 / USB"] --> PRE[("pre-event buffer")]
     PRE --> REC
     REC --> OUT[("clip + metadata + SHA-256")]
+    CAM --> DET["detector (GPU)"]
   end
-  Q -- "Ethernet: framed event + integrity check" --> RX
+  HOST["Máy host: CI, nhận dữ liệu"]
+  SVC -- "Ethernet: dữ liệu IMU + event" --> RX
+  DET -- "event nhận dạng" --> SVC
+  RX -- "dữ liệu" --> HOST
 ```
+Trước 06/2027, sensor-svc đọc LSM6DSOX trực tiếp qua driver IIO trên Linux; firmware M33 thay phần lấy mẫu ở bước tích hợp.
 
 | Component | Board | Ngôn ngữ | Trách nhiệm |
 | --- | --- | --- | --- |
-| sensor-svc | STM32MP2 | C | Đọc sensor + GPIO, phát hiện event, giữ event khi mất link, gửi event |
+| sensor firmware | MP257F (M33) | C, STM32CubeMP2 | Lấy mẫu LSM6DSOX real-time, điều khiển LED/buzzer, RPMsg |
+| sensor-svc | MP257F (A35) | C/C++ | Nhận mẫu (IIO hoặc RPMsg), phát hiện sự kiện, gửi dữ liệu/event, giữ event khi mất link |
 | protocol | Cả hai | C | Encode/decode frame, version, kiểm tra toàn vẹn; unit test trên host |
-| event-rx | Jetson | C/C++ | Nhận + validate event, ack, chuyển cho recorder |
-| recorder | Jetson | C++ + GStreamer | Pre-event buffer, ghi clip, metadata, SHA-256 |
-| systemd units | Cả hai | — | Khởi động, restart, logging qua journald |
+| event-rx | Jetson | C/C++ | Nhận + validate, ack, chuyển cho recorder, forward về host |
+| recorder | Jetson | C++ + GStreamer | Pre-event buffer, encode phần cứng, ghi clip, metadata, SHA-256 |
+| detector | Jetson | jetson-inference | Nhận dạng trên GPU, gửi event về MP257F |
+| systemd units + watchdog | Cả hai | — | Khởi động, restart, watchdog, logging qua journald |
+| CI | Máy host | — | Unit test, cross compile build, deploy lên hai board |
 
 ## Open decisions
-Chốt bằng thí nghiệm; ghi lựa chọn, phương án bị loại và evidence vào [Trade-offs](#trade-offs).
+Mỗi quyết định viết thành một ADR (bối cảnh, phương án, lựa chọn, lý do, hệ quả) trong [docs/adr](../../docs/adr/README.md).
 
 | Quyết định | Lựa chọn | Tiêu chí | Chốt ở |
 | --- | --- | --- | --- |
-| Sensor | Model I2C cụ thể | Có datasheet, 3.3V, dễ mua | M0 |
-| Event detection | Ngưỡng sensor / GPIO edge / cả hai | False positive, latency | M1 |
-| Pre-event buffer | Ring buffer frame raw / segment đã encode | RAM, CPU, độ dài pre-event | M1 |
-| Transport | TCP / UDP + sequence / MQTT | Mất gói, reconnect, độ phức tạp, dependency | M2 |
-| Framing + integrity | Length-prefix + CRC / COBS / khác | Phát hiện frame lỗi, resync | M2, sau lab [struct-union](../../c-cpp-foundation/struct-union/README.md) |
-| Time sync | NTP (chrony) / PTP | Sai lệch đo được giữa hai board | M4 |
+| Transport dữ liệu IMU | TCP / UDP + sequence / MQTT | Độ trễ, mất gói, reconnect, dependency | 04/2027 |
+| Framing + integrity | Length-prefix + CRC / COBS / payload MQTT | Phát hiện frame lỗi, resync; sau lab [struct-union](../../c-cpp-foundation/struct-union/README.md) | 04/2027 |
+| Bảo mật kênh | TLS server-only / mutual TLS (client certificate) | Mức xác thực, chi phí CPU | 04/2027 |
+| Ngôn ngữ service | C++ / Go | Hiệu năng, thư viện, toolchain trên JetPack 4.6 | 04/2027 |
+| Encode video | H.264 phần cứng / phần mềm | CPU, độ trễ, chất lượng | 05/2027 |
+| Pre-event buffer | Frame raw / segment đã encode | RAM, độ dài pre-event | 05/2027 |
+| Time sync | NTP (chrony) / PTP | Sai lệch đo được giữa hai board | 05/2027 |
+| OTA | RAUC / SWUpdate | Tích hợp Yocto, rollback | 06/2027 |
 
 ## Requirements
 | ID | Requirement | Acceptance test | Result |
 | --- | --- | --- | --- |
-| R01 | sensor-svc đọc sensor theo chu kỳ cấu hình được; lỗi I/O được log và service tiếp tục chạy | Tháo dây sensor khi đang chạy → có log lỗi; cắm lại → tự phục hồi, không restart | Not run |
-| R02 | Event frame có version, byte order cố định và kiểm tra toàn vẹn; decoder từ chối frame lỗi | Unit test: round-trip, frame cắt ngắn, sai CRC, version lạ | Not run |
-| R03 | Khi mất link, sensor-svc giữ tối đa N event và gửi lại theo thứ tự khi kết nối lại; đếm event bị drop khi đầy | Rút cáp Ethernet trong lúc tạo event → cắm lại → so sánh sequence gửi/nhận | Not run |
-| R04 | Recorder lưu clip gồm T_pre giây trước và T_post giây sau event, kèm metadata và SHA-256 | Tạo event → kiểm tra độ dài clip, metadata, `sha256sum` khớp | Not run |
-| R05 | Đo latency từ GPIO edge đến khi Jetson nhận event (p50/p99) | Đo ≥ 100 event; đặt target sau lần đo đầu, không đặt trước | Not run |
-| R06 | Cả hai service chạy bằng systemd và tự restart khi crash | `kill -9` → service chạy lại; event đã ack không bị mất | Not run |
-| R07 | Build tái hiện từ clean checkout: sensor-svc cross compile bằng SDK, phía Jetson build native | Clean clone → làm theo README → binary chạy được trên board | Not run |
+| R01 | sensor-svc đọc LSM6DSOX với ODR cấu hình được (mặc định 104 Hz); lỗi I/O được log và service tiếp tục chạy | Tháo dây sensor khi đang chạy → có log lỗi; cắm lại → tự phục hồi, không restart | Not run |
+| R02 | Frame dữ liệu/event có version, byte order cố định và kiểm tra toàn vẹn; decoder từ chối frame lỗi | Unit test: round-trip, frame cắt ngắn, sai CRC, version lạ | Not run |
+| R03 | Khi mất link, sensor-svc giữ tối đa N event và gửi lại theo thứ tự; đếm event bị drop khi đầy | Rút cáp Ethernet trong lúc tạo event → cắm lại → so sánh sequence gửi/nhận | Not run |
+| R04 | Đo độ trễ và tỉ lệ mất gói MP257F → Jetson cho TCP và UDP | Wireshark capture + script thống kê; ghi p50/p99 và tỉ lệ mất gói | Not run |
+| R05 | Kênh dữ liệu được mã hoá TLS theo ADR | Kết nối với certificate sai bị từ chối | Not run |
+| R06 | Sự kiện rung/rơi kích hoạt ghi clip gồm T_pre giây trước và T_post giây sau, kèm metadata (timestamp, dữ liệu IMU) và SHA-256 | Tạo event → kiểm tra độ dài clip, metadata, `sha256sum` khớp | Not run |
+| R07 | Đo latency từ cạnh INT1 của LSM6DSOX đến khi Jetson nhận event | Đo ≥ 100 event; đặt target sau lần đo đầu, không đặt trước | Not run |
 | R08 | Metadata ghi chênh lệch đồng hồ giữa hai board tại thời điểm event | So sánh với phép đo độc lập | Not run |
+| R09 | Event nhận dạng từ Jetson bật LED/buzzer trên MP257F | Đo độ trễ từ frame có đối tượng đến khi LED bật | Not run |
+| R10 | Service chạy bằng systemd có watchdog, tự restart khi treo hoặc crash | `kill -9` và treo giả lập → service chạy lại; event đã ack không mất | Not run |
+| R11 | Mất điện khi đang ghi không làm hỏng clip đã đóng | Rút nguồn 500 lần khi đang ghi; đếm file hỏng; mục tiêu 0 | Not run |
+| R12 | OTA A/B có rollback | Cài bản lỗi cố ý → tự rollback về bản trước | Not run |
+| R13 | Firmware M33 lấy mẫu LSM6DSOX real-time và gửi lên Linux qua RPMsg | So sánh jitter lấy mẫu giữa M33 và Linux | Not run |
+| R14 | Build tái hiện + CI: unit test và cross compile build xanh; người khác clone và chạy theo README | CI log + thử trên máy sạch | Not run |
 
-## Milestones
-| Milestone | Dự kiến | Output | Gate | Liên kết |
-| --- | --- | --- | --- | --- |
-| M0 Scope + bring-up | 12/2026–01/2027 | Boot log hai board, console, ping qua Ethernet, chọn sensor/camera | Tái hiện boot từ README | [STM32MP2](../../hardware/boards/stm32mp257f-dk.md), [Jetson](../../hardware/boards/jetson-nano.md) |
-| M1 Peripheral | 01–02/2027 | sensor-svc đọc I2C + GPIO (cross compile); Jetson capture camera + prototype pre-event buffer | Lab I2C/GPIO Done | [hardware labs](../../hardware/README.md) |
-| M2 Protocol + link | 02/2027 | Thư viện protocol + unit test; sender/receiver; xử lý mất link (R02, R03) | Test lỗi tái hiện được | [error-handling](../../c-cpp-foundation/error-handling/README.md) |
-| M3 Service + image | 03–04/2027 | systemd units; image STM32MP2 bằng Yocto có sensor-svc (R06, R07) | Clean build + restart test có log | [roadmap](../../ROADMAP.md) |
-| M4 Integration + đo đạc | 05/2027 | Recorder hoàn chỉnh, time sync, latency, test matrix (R04, R05, R08) | Người khác làm theo được | — |
-| M5 Portfolio | 06/2027 | Demo video, architecture doc, interview narrative | Kể được trade-off + 1 debug story | [livecoding](../../livecoding/README.md) |
+## Checklist Cổng 2 (06/2027)
+- [ ] README tiếng Anh, sơ đồ kiến trúc, video demo
+- [ ] CI chạy unit test và build cross compile
+- [ ] 8–10 ADR trong [docs/adr](../../docs/adr/README.md)
+- [ ] 10 bản ghi root cause trong [debug-logs](../../debug-logs/README.md)
+- [ ] Báo cáo test rút nguồn khi đang ghi (R11)
+- [ ] Sau đó: threat model (07/2027), 1 patch gửi upstream Linux kernel, U-Boot hoặc Zephyr (09/2027)
 
 ## Planned layout
-Tạo folder khi bắt đầu milestone tương ứng; không tạo folder rỗng trước.
+Tạo folder khi bắt đầu phần tương ứng; không tạo folder rỗng trước.
 ```text
 projects/stm32mp257f-dk_jetson-nano/
 ├── README.md        # project report (file này)
-├── common/          # protocol encode/decode + unit tests (M2)
-├── mp2/             # sensor-svc, build cho SDK, systemd unit (M1–M3)
-├── jetson/          # event-rx, recorder, systemd unit (M1–M4)
-├── yocto/           # layer/recipe cho image STM32MP2 (M3)
-├── tests/           # test matrix, script đo latency (M2–M4)
+├── common/          # protocol encode/decode + unit tests
+├── mp2/             # sensor-svc, firmware M33, systemd unit
+├── jetson/          # event-rx, recorder, detector, systemd unit
+├── yocto/           # layer/recipe cho image STM32MP2
+├── tests/           # test matrix, script đo latency, test rút nguồn
 ├── debug/           # debug report theo templates/debug-report.md
 └── evidence/        # log, số đo đã rà soát
 ```
 
 ## Evidence
-Tên file: `YYYY-MM-DD_<board>_<topic>_<case>.txt` (hoặc `.log` / `.png`), ví dụ `2027-01-10_mp2_boot_sdcard.log`.
+Tên file: `YYYY-MM-DD_<board>_<topic>_<case>.txt` (hoặc `.log` / `.png`), ví dụ `2026-11-07_mp2_boot_sdcard.log`.
 Mỗi evidence ghi timestamp + timezone, board + revision, image/kernel, lệnh, source commit.
 Image OS, SDK, video clip lớn: ghi checksum và nơi lưu, không commit file.
-
-## Trade-offs
-Ghi khi chốt từng open decision: lựa chọn, phương án bị loại, lý do, evidence.
-TODO
 
 ## Build and run
 Host/board/image/toolchain versions; dependencies; exact commands; expected output:
@@ -113,7 +128,9 @@ TODO
 ## Limitations
 Known issues và phần chưa được kiểm chứng:
 - Jetson Nano bị giới hạn ở JetPack 4.6 (Ubuntu 18.04, GCC 7); code dùng chung phải build được bằng toolchain này.
+- Jetson Nano không có Wi-Fi sẵn: hai board và máy host nối chung switch Ethernet.
+- Camera Raspberry Pi v3 không được hỗ trợ sẵn trên JetPack 4.6; dùng camera v2 (IMX219) hoặc webcam USB.
 
-## Interview narrative
+## Project narrative
 Problem → constraints → decision → evidence → lesson:
 TODO

@@ -2,9 +2,9 @@
 Status: Not run
 
 ## Goal
-Nối một sensor I2C 3.3V (ghi model) vào bus trên header; xác định bus bằng `i2cdetect -l`, scan bus đó, đọc register ID bằng `i2cget`; sau đó viết chương trình C dùng `ioctl(I2C_RDWR)`.
+Đo 3.3V trên header bằng multimeter trước khi nối LSM6DSOX; xác định bus bằng `i2cdetect -l`, scan bus đó, đọc WHO_AM_I bằng `i2cget` và giải mã gói bằng logic analyzer. Sau đó viết chương trình C qua `/dev/i2c-N` (`ioctl(I2C_RDWR)`) đọc gia tốc và con quay ở 104 Hz.
 
-Artifact cần tạo: Wiring; output i2cdetect/i2cget; src/i2c_read.c; logic analyzer capture nếu có.
+Artifact cần tạo: Wiring; output i2cdetect/i2cget; ảnh logic analyzer; src/lsm6dsox_i2c.c + mẫu dữ liệu đọc được.
 
 ## Environment
 Date/time + timezone:
@@ -16,7 +16,7 @@ Source commit:
 Prerequisites:
 
 ## Planned cases
-Địa chỉ đúng; địa chỉ sai (NACK → errno gì); tháo SDA; so sánh giá trị ID với datasheet.
+Địa chỉ đúng; địa chỉ sai (NACK → errno gì); tháo SDA; WHO_AM_I so với datasheet (LSM6DSOX: 0x6C); board nằm yên → trục Z xấp xỉ 1 g.
 
 ## Prediction
 Tôi nghĩ sẽ xảy ra gì, vì sao?

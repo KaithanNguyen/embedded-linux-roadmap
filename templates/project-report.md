@@ -22,5 +22,5 @@ Issue, hypothesis, measurement, fix, retest:
 Commit + video/log + cách tái hiện:
 ## Limitations
 Known issues và chưa được kiểm chứng:
-## Interview narrative
+## Project narrative
 Problem → constraints → decision → evidence → lesson:

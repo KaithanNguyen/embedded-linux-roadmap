@@ -7,13 +7,13 @@ Mode CPOL/CPHA, chip select, clock speed, full-duplex, spidev, device tree/pinmu
 Không dùng AI: SPI mode 0–3 khác nhau ở đâu? Vì sao SPI không có ACK như I2C? Ai quyết định tốc độ clock tối đa?
 
 ## Experiment — 20 phút/buổi
-Nối loopback MOSI→MISO trên header (không cần thiết bị ngoài); gửi/nhận buffer bằng chương trình C `ioctl(SPI_IOC_MESSAGE)`; thử đổi mode và speed.
+Bước 1: loopback MOSI→MISO trên header, gửi/nhận buffer bằng chương trình C `ioctl(SPI_IOC_MESSAGE)`, thử đổi mode và speed. Bước 2: chuyển LSM6DSOX sang SPI, đọc WHO_AM_I, so sánh thời gian đọc I2C và SPI bằng logic analyzer.
 
 ## Cases cần kiểm tra
-Có/không nối loopback; speed thấp/cao; spidev chưa được bật trong device tree/pinmux → ghi blocker và cách bật.
+Có/không nối loopback; speed thấp/cao; sai SPI mode với LSM6DSOX; spidev chưa được bật trong device tree/pinmux → ghi blocker và cách bật.
 
 ## Required artifacts
-src/spi_loopback.c; output; cấu hình device tree/pinmux đã dùng.
+src/spi_loopback.c, src/lsm6dsox_spi.c; output; ảnh logic analyzer I2C vs SPI; cấu hình device tree/pinmux đã dùng.
 Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence phải trỏ đến file thật khi hoàn thành.
 
 ## Safety & setup

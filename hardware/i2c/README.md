@@ -7,13 +7,13 @@ Open-drain + pull-up, địa chỉ 7-bit, ACK/NACK, register read/write, i2c-too
 Không dùng AI: Vì sao I2C cần pull-up? Datasheet ghi địa chỉ 7-bit hay 8-bit, khác nhau thế nào? NACK cho biết điều gì?
 
 ## Experiment — 20 phút/buổi
-Nối một sensor I2C 3.3V (ghi model) vào bus trên header; xác định bus bằng `i2cdetect -l`, scan bus đó, đọc register ID bằng `i2cget`; sau đó viết chương trình C dùng `ioctl(I2C_RDWR)`.
+Đo 3.3V trên header bằng multimeter trước khi nối LSM6DSOX; xác định bus bằng `i2cdetect -l`, scan bus đó, đọc WHO_AM_I bằng `i2cget` và giải mã gói bằng logic analyzer. Sau đó viết chương trình C qua `/dev/i2c-N` (`ioctl(I2C_RDWR)`) đọc gia tốc và con quay ở 104 Hz.
 
 ## Cases cần kiểm tra
-Địa chỉ đúng; địa chỉ sai (NACK → errno gì); tháo SDA; so sánh giá trị ID với datasheet.
+Địa chỉ đúng; địa chỉ sai (NACK → errno gì); tháo SDA; WHO_AM_I so với datasheet (LSM6DSOX: 0x6C); board nằm yên → trục Z xấp xỉ 1 g.
 
 ## Required artifacts
-Wiring; output i2cdetect/i2cget; src/i2c_read.c; logic analyzer capture nếu có.
+Wiring; output i2cdetect/i2cget; ảnh logic analyzer; src/lsm6dsox_i2c.c + mẫu dữ liệu đọc được.
 Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence phải trỏ đến file thật khi hoàn thành.
 
 ## Safety & setup
@@ -22,6 +22,7 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 - Ghi board revision, image/kernel (`uname -a`) và version tool; rà soát log (MAC, serial, IP) trước khi commit.
 - Xem thêm [quy tắc an toàn](../README.md#an-toàn--đọc-trước-mỗi-lab).
 - Chỉ scan bus nối ra header; scan bus nội bộ (PMIC, EEPROM...) có thể gây tác dụng phụ.
+- Lab này truy cập từ user space: không bind driver kernel `st_lsm6dsx` vào cùng địa chỉ (bước IIO làm sau).
 
 ## Socratic review — 10 phút
 - Dự đoán ban đầu sai ở đâu? Dẫn chứng?

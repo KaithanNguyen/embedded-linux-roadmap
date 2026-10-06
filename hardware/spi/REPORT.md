@@ -2,9 +2,9 @@
 Status: Not run
 
 ## Goal
-Nối loopback MOSI→MISO trên header (không cần thiết bị ngoài); gửi/nhận buffer bằng chương trình C `ioctl(SPI_IOC_MESSAGE)`; thử đổi mode và speed.
+Bước 1: loopback MOSI→MISO trên header, gửi/nhận buffer bằng chương trình C `ioctl(SPI_IOC_MESSAGE)`, thử đổi mode và speed. Bước 2: chuyển LSM6DSOX sang SPI, đọc WHO_AM_I, so sánh thời gian đọc I2C và SPI bằng logic analyzer.
 
-Artifact cần tạo: src/spi_loopback.c; output; cấu hình device tree/pinmux đã dùng.
+Artifact cần tạo: src/spi_loopback.c, src/lsm6dsox_spi.c; output; ảnh logic analyzer I2C vs SPI; cấu hình device tree/pinmux đã dùng.
 
 ## Environment
 Date/time + timezone:
@@ -16,7 +16,7 @@ Source commit:
 Prerequisites:
 
 ## Planned cases
-Có/không nối loopback; speed thấp/cao; spidev chưa được bật trong device tree/pinmux → ghi blocker và cách bật.
+Có/không nối loopback; speed thấp/cao; sai SPI mode với LSM6DSOX; spidev chưa được bật trong device tree/pinmux → ghi blocker và cách bật.
 
 ## Prediction
 Tôi nghĩ sẽ xảy ra gì, vì sao?

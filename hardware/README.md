@@ -12,30 +12,33 @@ Mỗi kết luận cần evidence thật: log, số đo, ảnh setup hoặc capt
 - Đo điện áp bằng multimeter ở chế độ V; không để que đo chạm hai pin cạnh nhau.
 
 ## Boards
-| Board | Profile | Vai trò trong project |
-| --- | --- | --- |
-| STM32MP257F-DK | [stm32mp257f-dk.md](boards/stm32mp257f-dk.md) | Sensor/control node chạy OpenSTLinux |
-| Jetson Nano | [jetson-nano.md](boards/jetson-nano.md) | Camera, xử lý và lưu clip |
+| Board | Profile | Bắt đầu dùng | Vai trò trong project |
+| --- | --- | --- | --- |
+| STM32MP257F-DK | [stm32mp257f-dk.md](boards/stm32mp257f-dk.md) | 11/2026 | Node real-time: M33 lấy mẫu sensor, điều khiển LED/buzzer; Linux trên A35 chạy service |
+| Jetson Nano (Tegra X1) | [jetson-nano.md](boards/jetson-nano.md) | 04/2027 | Gateway và camera: nhận dữ liệu, pipeline GStreamer có encoder phần cứng, nhận dạng bằng GPU |
 
-Project tích hợp: [STM32MP257F-DK + Jetson Nano](../projects/stm32mp257f-dk_jetson-nano/README.md).
+Project tích hợp: [STM32MP257F-DK + Jetson Nano](../projects/stm32mp257f-dk_jetson-nano/README.md). Vai trò và thời điểm của từng thiết bị: [roadmap](../ROADMAP.md#thứ-tự-học-và-vai-trò-thiết-bị).
 
 ## Inventory
-Chỉ ghi thiết bị đang có thật; không công khai serial number hoặc MAC address.
+Cột "Có sẵn?" chỉ ghi "Có" khi thiết bị đã ở trong tay; không công khai serial number hoặc MAC address.
 
 | Thiết bị | Model / revision | Có sẵn? | Dùng cho | Ghi chú |
 | --- | --- | --- | --- | --- |
-| STM32MP257F-DK | TODO: revision trên PCB | Có | Board labs, project | — |
-| Jetson Nano Developer Kit | TODO: 4GB (A02/B01) hay 2GB | Có | Board labs, project | Bản gốc (Tegra X1) |
-| microSD (mỗi board một thẻ) | TODO: dung lượng, class | TODO | Boot image | Ghi checksum image đã ghi |
-| Cáp USB-C có data | TODO | TODO | Console ST-LINK của STM32MP2 | — |
-| Nguồn 5V⎓4A barrel cho Jetson | TODO | TODO | Chạy ổn định khi dùng camera/GPU | Cần jumper J48 |
-| USB-UART 3.3V (FTDI/CP2102/...) | TODO | TODO | Debug UART của Jetson | Chọn loại có mức 3.3V |
-| Cáp Ethernet / switch | TODO | TODO | Kết nối hai board | — |
-| Multimeter | TODO | TODO | Đo rail, mức logic | — |
-| Logic analyzer (tùy chọn) | TODO | TODO | Capture UART/I2C/SPI | — |
-| Breadboard, LED, điện trở, nút bấm, dây jumper | TODO | TODO | GPIO lab | — |
-| Sensor I2C 3.3V | TODO: model | TODO | I2C lab + project | Lưu link datasheet |
-| Camera CSI hoặc USB cho Jetson | TODO: model | TODO | Project | — |
+| STM32MP257F-DK | TODO: revision trên PCB | Có | Board labs, project | Nguồn USB-C 5V/3A; console qua STLINK-V3EC trên board |
+| Jetson Nano Developer Kit | Bản gốc (Tegra X1), 4GB; TODO: revision carrier A02/B01 | Có | Networking, camera, AI (từ 04/2027) | Nguồn 5V/4A qua jack DC + jumper J48; nên gắn quạt; không có Wi-Fi sẵn |
+| microSD cho Jetson | ≥ 64 GB | TODO | Rootfs JetPack 4.6 | Ghi checksum image đã ghi |
+| microSD cho STM32MP257F-DK | TODO: dung lượng | TODO | Starter Package / image Yocto | Ghi checksum image đã ghi |
+| Cáp USB-C có data | — | TODO | Console + nguồn STM32MP257F-DK | — |
+| LSM6DSOX (IMU) | TODO: module/breakout | TODO | Peripheral chính: I2C, SPI, IRQ, IIO, driver | WHO_AM_I 0x6C theo datasheet |
+| BME280 | TODO: module | TODO | Bài I2C phụ, M33 | — |
+| LED, buzzer, nút bấm, điện trở, breadboard, dây jumper | — | TODO | GPIO, device tree, M33 | — |
+| Logic analyzer 8 kênh | TODO | TODO | Giải mã I2C/SPI/UART, đo timing ngắt | Ảnh tín hiệu vào bản ghi debug |
+| Đồng hồ vạn năng | TODO | TODO | Kiểm tra 3.3V, thông mạch, đo dòng cảm biến | — |
+| USB-UART 3.3V | TODO | TODO | UART thứ hai trên header MP257F (log M33), console Jetson | Từ 01/2027 |
+| Switch Ethernet 5 cổng + 3 cáp | TODO | TODO | Host, MP257F, Jetson chung một LAN | — |
+| Camera Raspberry Pi v2 (IMX219) | — | TODO | Camera cho Jetson (05/2027) | Chạy sẵn với JetPack; camera v3 không được hỗ trợ sẵn; tạm dùng webcam USB |
+
+Chưa cần camera B-CAMS-IMX cho STM32MP257F-DK: phần camera làm trên Jetson rẻ và nhanh hơn.
 
 ## Topic labs
 Rotation: Electrical basics → UART → GPIO → I2C → SPI. Cùng nhịp 45 phút; một lab phần cứng có thể kéo dài nhiều buổi.
