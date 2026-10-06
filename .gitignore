@@ -1,0 +1,27 @@
+# Build products
+build/
+*.o
+*.obj
+*.a
+*.so
+*.exe
+*.out
+# Large images / generated OS builds
+*.img
+*.wic
+*.iso
+tmp/
+downloads/
+sstate-cache/
+# Private local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+# Keep reviewed text evidence trackable; do not blanket-ignore *.log.

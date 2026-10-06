@@ -1,4 +1,4 @@
-# Debug 01 — microSD detection / mounting
+# Debug: <issue>
 Status: Open — chưa xác định root cause
 
 ## Problem
@@ -29,12 +29,3 @@ Vì sao fix giải quyết nguyên nhân:
 Retest case gốc + regression + evidence:
 ## Lessons / prevention
 TODO
-
-## Checklist thu thập
-- Host OS, native/VM/WSL, reader/adapter, model/dung lượng thẻ:
-- `lsblk`, `lsblk -f`, `df -h` trước/sau cắm:
-- `dmesg` đoạn liên quan; ghi Permission denied nếu bị chặn:
-- Disk có xuất hiện? Có partition? Filesystem? Mountpoint?
-- Với VM/WSL: thiết bị đã được chuyển vào guest chưa?
-- Thử reader/port/thẻ khác để phân biệt giả thuyết, ghi từng thay đổi.
-- Không format hoặc ghi image trong bước chẩn đoán này.

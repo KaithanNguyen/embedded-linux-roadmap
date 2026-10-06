@@ -14,7 +14,3 @@ Mỗi ngày copy một entry dưới đây lên đầu danh sách. Không ghi k�
 - Trạng thái: Not run / In progress / Blocked / Done
 - Bước nhỏ tiếp theo:
 
-## Index
-| Ngày | Topic | Artifact | Trạng thái |
-| --- | --- | --- | --- |
-| Chưa có | — | — | — |
