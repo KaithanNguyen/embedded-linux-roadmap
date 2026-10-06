@@ -10,3 +10,4 @@ Copy mẫu vào sprint/topic/project thật; đổi tiêu đề và ghi evidence
 - [monthly-review](monthly-review.md)
 - [quarterly-review](quarterly-review.md)
 - [project-report](project-report.md)
+- [livecoding-session](livecoding-session.md)

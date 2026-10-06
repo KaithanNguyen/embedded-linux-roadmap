@@ -6,13 +6,28 @@ build/
 *.so
 *.exe
 *.out
+*.d
+*.elf
+*.ko
+*.dtb
+*.dtbo
+CMakeCache.txt
+CMakeFiles/
+# Core dumps may contain memory contents; keep reviewed backtrace excerpts instead
+core
+core.[0-9]*
+vgcore.*
 # Large images / generated OS builds
 *.img
 *.wic
 *.iso
+*.ext4
+*.tbz2
 tmp/
 downloads/
 sstate-cache/
+build-*/
+Linux_for_Tegra/
 # Private local configuration
 .env
 .env.*

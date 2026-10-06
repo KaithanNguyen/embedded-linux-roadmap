@@ -8,11 +8,18 @@ Mỗi project mới có folder riêng, dùng [project report](../templates/proje
 - Evidence: log thật, measurements và commit.
 - Debug notes: hypothesis, root cause, fix và regression.
 
-## Backlog — chưa triển khai
-| Project idea | Outcome | Gate |
+## Đang triển khai
+| Project | Boards | Trạng thái |
 | --- | --- | --- |
-| Linux data logger | Thu dữ liệu, xử lý I/O error, shutdown sạch | Test lỗi và tái hiện |
-| Board service | Cross compile, deploy, start/restart service | Build/run trên board + log |
-| Reproducible image | Ghi cấu hình, build image và boot verification | Clean build + checksum + boot evidence |
+| [Event-triggered edge capture](stm32mp257f-dk_jetson-nano/README.md) | STM32MP257F-DK + Jetson Nano | Planned |
+
+## Backlog
+Ba ý tưởng dưới đây được gộp thành milestone của project trên thay vì làm riêng.
+
+| Project idea | Outcome | Gate | Gộp vào |
+| --- | --- | --- | --- |
+| Linux data logger | Thu dữ liệu, xử lý I/O error, shutdown sạch | Test lỗi và tái hiện | sensor-svc (M1–M2) |
+| Board service | Cross compile, deploy, start/restart service | Build/run trên board + log | systemd units (M3) |
+| Reproducible image | Ghi cấu hình, build image và boot verification | Clean build + checksum + boot evidence | Yocto image STM32MP2 (M3) |
 
 Chọn một project theo roadmap, chỉ chuyển sang project tiếp theo sau khi có evidence.

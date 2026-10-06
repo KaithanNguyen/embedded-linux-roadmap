@@ -1,8 +1,10 @@
 # C/C++ foundation
-Rotation: Pointer → Memory → static/extern → volatile → struct/union → function pointer → linker → undefined behavior.
-
 45 phút mỗi buổi: recall 10 → experiment 20 → Socratic review 10 → conclusions 5.
-Làm bài trước khi xem gợi ý/nhờ AI; dùng C11 cho vòng đầu, ghi chuẩn/compiler khi làm biến thể C++.
+Làm bài trước khi xem gợi ý/nhờ AI; dùng C11 cho track A/B, C++17 cho track C; ghi chuẩn/compiler cho mỗi biến thể.
+Học tuần tự theo track; thời gian là dự kiến, điều chỉnh theo evidence.
+
+## Track A — C core (10–11/2026)
+Rotation: Pointer → Memory → static/extern → volatile → struct/union → function pointer → linker → undefined behavior.
 
 | Topic | Nội dung |
 | --- | --- |
@@ -14,5 +16,29 @@ Làm bài trước khi xem gợi ý/nhờ AI; dùng C11 cho vòng đầu, ghi ch
 | [Function pointer](function-pointer/README.md) | Callback signatures, dispatch, context pointer, ownership |
 | [Linker](linker/README.md) | Translation units, symbols, sections, relocation, link order |
 | [Undefined behavior](undefined-behavior/README.md) | Bounds, lifetime, signed overflow, uninitialized read |
+
+## Track B — C cho Linux/embedded (11–12/2026)
+Rotation: Integer/bitwise → Preprocessor/build → Error handling → Concurrency → GDB.
+
+| Topic | Nội dung |
+| --- | --- |
+| [Integer & bitwise](integer-bitwise/README.md) | Fixed-width types, promotion, signed/unsigned, shift, mask, bitfield |
+| [Preprocessor & build](preprocessor-build/README.md) | Macro pitfalls, conditional compilation, Make dependency, CMake |
+| [Error handling](error-handling/README.md) | Return code, errno, goto cleanup, short read/write, EINTR |
+| [Concurrency](concurrency/README.md) | pthread, data race, mutex/condvar, C11 atomics |
+| [GDB & debugging tools](gdb-debugging/README.md) | Breakpoint, watchpoint, core dump, Valgrind, gdbserver |
+
+## Track C — C++ cho embedded (12/2026–01/2027)
+Rotation: RAII → Classes/polymorphism → Templates/STL → C/C++ interop.
+
+| Topic | Nội dung |
+| --- | --- |
+| [RAII & ownership](cpp-raii-ownership/README.md) | ctor/dtor, rule of 0/3/5, move, unique_ptr/shared_ptr |
+| [Classes & polymorphism](cpp-oop-polymorphism/README.md) | Object layout, vtable, virtual destructor, so sánh với C ops table |
+| [Templates & STL](cpp-templates-stl/README.md) | Template, constexpr, std::array/vector, iterator invalidation, code size |
+| [C/C++ interop](cpp-c-interop/README.md) | extern "C", name mangling, -fno-exceptions/-fno-rtti |
+
+Track B/C dùng lại code của track trước (counter của static-extern, copy_file của error-handling); giữ link giữa các REPORT.
+Bài luyện phỏng vấn có timebox tách riêng tại [livecoding](../livecoding/README.md).
 
 Mỗi topic có README hướng dẫn và REPORT.md để ghi actual output. Source/tests/evidence do người học tạo trong quá trình làm bài.
