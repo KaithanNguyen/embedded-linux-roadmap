@@ -42,3 +42,5 @@ Giải thích chênh lệch dự đoán/kết quả; giới hạn của phép th
 5 câu giải thích mục tiêu, cách làm, lỗi, kết quả, ứng dụng.
 ## Next action
 TODO
+## Tracking
+Có kết quả thật thì cập nhật level + evidence của topic trong [TRACKING.md](../../TRACKING.md).

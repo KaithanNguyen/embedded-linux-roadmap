@@ -1,7 +1,7 @@
 # Monthly review: <YYYY-MM>
 Status: Chưa đánh giá
 ## Output thực tế
-So với dòng tháng này trong [roadmap](../ROADMAP.md#theo-tháng).
+So với dòng tháng này trong bảng "Theo tháng" của `ROADMAP.md`.
 
 | Artifact/demo | Commit | Reproduction | Kết quả / giới hạn |
 | --- | --- | --- | --- |
@@ -11,8 +11,14 @@ So với dòng tháng này trong [roadmap](../ROADMAP.md#theo-tháng).
 - [ ] Hoàn thành một milestone project, kèm một ADR
 - [ ] Một mini project 90 phút cùng AI; cập nhật AI error log
 - [ ] Một bài viết kỹ thuật tiếng Anh
-- [ ] Cập nhật bảng tháng và chỉ số trong roadmap; thêm các dòng tuần của tháng tới vào sprints README
+- [ ] Spot check: làm lại 2 topic L3 chọn ngẫu nhiên trong `TRACKING.md`; ghi kết quả bên dưới
+- [ ] Xử lý các topic trễ hạn mà `python tools/repo_check.py check` cảnh báo
+- [ ] Cập nhật bảng tháng trong roadmap; thêm các dòng tuần của tháng tới vào `sprints/README.md`
 - [ ] Tạo file log của tháng tới
+## Spot check
+| Topic | Làm lại được không ghi chú? | Thời gian | Giữ level / hạ level |
+| --- | --- | --- | --- |
+| TODO | — | — | — |
 ## Năng lực
 Tôi tự làm được gì? Cần gợi ý gì? Chưa hiểu gì?
 ## Debug story

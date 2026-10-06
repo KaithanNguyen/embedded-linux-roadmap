@@ -19,5 +19,5 @@ Status: Not started · Đã làm: 0/7
 | 33 | [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/) | Medium | 0 | — | — | Not started | — | — |
 | 153 | [Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).

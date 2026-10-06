@@ -7,6 +7,7 @@ Mỗi sprint có README, exercises, scripts, debug và evidence khi cần.
 - 1 bản ghi [debug journal](../debug-logs/README.md) (hoặc "đã thử gì, giả thuyết gì").
 - 2–3 bài [LeetCode](../leetcode/README.md), vừa làm vừa nói to cách nghĩ.
 - 1 bài viết hoặc bản ghi âm tiếng Anh tổng hợp tuần.
+- Verify: làm lại 1–2 topic đã ở L2 được ≥ 7 ngày, cập nhật level trong [TRACKING.md](../TRACKING.md).
 - Review Chủ nhật 30 phút: cập nhật cột "Output thực tế" và "Trạng thái" bên dưới, chọn ba việc quan trọng nhất tuần tới.
 
 ## Q4/2026

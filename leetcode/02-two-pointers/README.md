@@ -19,5 +19,5 @@ Lọc, nén hoặc dịch dữ liệu ngay trong buffer mà không cấp phát t
 | 15 | [3Sum](https://leetcode.com/problems/3sum/) | Medium | 0 | — | — | Not started | — | — |
 | 11 | [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).

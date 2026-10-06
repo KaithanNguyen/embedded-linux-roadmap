@@ -5,7 +5,8 @@ Thời gian giả định: hai buổi Embedded Linux tối trong tuần (T3, T6)
 Kế hoạch theo từng mức:
 - **Quý, tháng, cổng, chỉ số:** file này.
 - **Tuần:** [sprints](sprints/README.md), mỗi tuần một dòng output mục tiêu + output thực tế.
-- **Ngày:** [nhịp học hằng tuần](README.md#nhịp-học-hằng-tuần) và [log một dòng mỗi ngày](LEARNING_LOG.md).
+- **Ngày:** [nhịp học hằng tuần](WORKFLOW.md#nhịp-học-hằng-tuần) và [log một dòng mỗi ngày](LEARNING_LOG.md).
+- **Verify từng topic:** [TRACKING.md](TRACKING.md) — level L0–L4, evidence, mục tiêu level theo cổng.
 
 ## Thứ tự học và vai trò thiết bị
 Laptop (Linux, C, gdb, cross compile) → STM32MP257F-DK (boot, U-Boot, device tree, kernel, driver, Yocto) → LSM6DSOX (peripheral thực chiến đầu tiên) → Jetson Nano từ 04/2027 (userspace nâng cao, networking, camera/AI).
@@ -26,8 +27,8 @@ Chi tiết thiết bị và an toàn: [hardware](hardware/README.md). Project t�
 ## Hai cổng
 | Cổng | Thời điểm | Tiêu chí đạt | Trạng thái |
 | --- | --- | --- | --- |
-| Cổng 1 — BSP & driver | 03/2027 | Kernel + DTB tự build; driver IIO tự viết cho LSM6DSOX; image Yocto riêng boot trên board; viết driver cho một cảm biến I2C mới trong 1 tuần mà không theo tutorial | Chưa đánh giá |
-| Cổng 2 — Hệ thống end-to-end | 06/2027 | MP257F + Jetson chạy end-to-end (IMU, mạng, video, M33); báo cáo test rút nguồn; CI xanh; README, ADR, video demo; người khác clone repo và chạy được theo README | Chưa đánh giá |
+| Cổng 1 — BSP & driver | 03/2027 | Kernel + DTB tự build; driver IIO tự viết cho LSM6DSOX; image Yocto riêng boot trên board; viết driver cho một cảm biến I2C mới trong 1 tuần mà không theo tutorial; level theo [mục tiêu cổng](TRACKING.md#mục-tiêu-level-theo-cổng) | Chưa đánh giá |
+| Cổng 2 — Hệ thống end-to-end | 06/2027 | MP257F + Jetson chạy end-to-end (IMU, mạng, video, M33); báo cáo test rút nguồn; CI xanh; README, ADR, video demo; người khác clone repo và chạy được theo README; level theo [mục tiêu cổng](TRACKING.md#mục-tiêu-level-theo-cổng) | Chưa đánh giá |
 
 ## Theo quý
 | Quý | Output phải có cuối quý | Tiêu chí đạt | Output thực tế | Trạng thái |
@@ -56,22 +57,25 @@ Chi tiết thiết bị và an toàn: [hardware](hardware/README.md). Project t�
 ## Output tối thiểu theo chu kỳ
 | Chu kỳ | Output tối thiểu | Nơi ghi |
 | --- | --- | --- |
-| Ngày | Mỗi buổi có một output (xem [nhịp học](README.md#nhịp-học-hằng-tuần)); ngày bị kẹt thì output là "đã thử gì, giả thuyết gì" | [log tháng](LEARNING_LOG.md) |
-| Tuần | 2 commit có ý nghĩa; 1 bản ghi debug journal; 2–3 bài LeetCode; 1 bài viết hoặc bản ghi âm tiếng Anh tổng hợp tuần; review Chủ nhật 30 phút | [sprints](sprints/README.md), [weekly review](templates/weekly-review.md) |
-| Tháng | Đọc lại debug journal, rút ra một khuôn mẫu lỗi; 1 milestone project + 1 ADR; 1 mini project 90 phút cùng AI + cập nhật AI error log; 1 bài viết kỹ thuật tiếng Anh | Bảng tháng ở trên, [monthly review](templates/monthly-review.md) |
-| Quý | Đối chiếu bảng quý; demo từ clean checkout; điều chỉnh quý tiếp theo | Bảng quý ở trên, [quarterly review](templates/quarterly-review.md) |
+| Ngày | Mỗi buổi có một output (xem [nhịp học](WORKFLOW.md#nhịp-học-hằng-tuần)); ngày bị kẹt thì output là "đã thử gì, giả thuyết gì" | [log tháng](LEARNING_LOG.md) |
+| Tuần | 2 commit có ý nghĩa; 1 bản ghi debug journal; 2–3 bài LeetCode; 1 bài viết hoặc bản ghi âm tiếng Anh tổng hợp tuần; verify lại 1–2 topic; review Chủ nhật 30 phút | [sprints](sprints/README.md), [TRACKING](TRACKING.md), [weekly review](templates/weekly-review.md) |
+| Tháng | Đọc lại debug journal, rút ra một khuôn mẫu lỗi; 1 milestone project + 1 ADR; 1 mini project 90 phút cùng AI + cập nhật AI error log; 1 bài viết kỹ thuật tiếng Anh; spot check 2 topic L3 | Bảng tháng ở trên, [monthly review](templates/monthly-review.md) |
+| Quý | Đối chiếu bảng quý; audit TRACKING; demo từ clean checkout; điều chỉnh quý tiếp theo | Bảng quý ở trên, [quarterly review](templates/quarterly-review.md) |
 
 Cập nhật cột "Output thực tế" và "Trạng thái" trong buổi review Chủ nhật, kèm link commit hoặc bài viết.
 Chủ nhật cuối mỗi tháng: thêm các dòng tuần của tháng tới vào [sprints](sprints/README.md).
 
 ## Chỉ số đến 06/2027
-| Chỉ số | Mục tiêu | Hiện tại | Nơi đếm |
-| --- | --- | --- | --- |
-| Bản ghi debug journal | 30 | 0 | [debug-logs](debug-logs/README.md) |
-| Bài LeetCode | 100 | 0 | [leetcode](leetcode/README.md) |
-| ADR | 10 | 0 | [docs/adr](docs/adr/README.md) |
-| Bài viết tiếng Anh | 20 | 0 | [docs/writeups](docs/writeups/README.md) |
-| Patch gửi upstream (đến 09/2027) | 1–2 | 0 | — |
+Số hiện tại được sinh tự động ở phần [Progress của README](README.md#progress) bằng `python tools/repo_check.py progress --write`.
+
+| Chỉ số | Mục tiêu | Nơi đếm |
+| --- | --- | --- |
+| Topic đạt ≥ L2 / ≥ L3 | Theo [mục tiêu cổng](TRACKING.md#mục-tiêu-level-theo-cổng) | [TRACKING](TRACKING.md) |
+| Bản ghi debug journal | 30 | [debug-logs](debug-logs/README.md) |
+| Bài LeetCode | 100 | [leetcode](leetcode/README.md) |
+| ADR | 10 | [docs/adr](docs/adr/README.md) |
+| Bài viết tiếng Anh | 20 | [docs/writeups](docs/writeups/README.md) |
+| Patch gửi upstream (đến 09/2027) | 1–2 | [TRACKING KN12](TRACKING.md#boot-bsp--kernel) |
 
 ## Chuẩn bị trước
 - Tuần 1–4 dùng WSL2 hoặc máy ảo đều được.

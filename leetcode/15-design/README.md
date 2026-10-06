@@ -18,5 +18,5 @@ Ring buffer (Design Circular Queue) là cấu trúc dữ liệu hay gặp nhất
 | 641 | [Design Circular Deque](https://leetcode.com/problems/design-circular-deque/) | Medium | 0 | — | — | Not started | — | — |
 | 146 | [LRU Cache](https://leetcode.com/problems/lru-cache/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).

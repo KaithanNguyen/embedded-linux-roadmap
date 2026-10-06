@@ -21,5 +21,5 @@ Parse input không tin cậy (atoi); xử lý frame ảnh như một ma trận.
 | 54 | [Spiral Matrix](https://leetcode.com/problems/spiral-matrix/) | Medium | 0 | — | — | Not started | — | — |
 | 73 | [Set Matrix Zeroes](https://leetcode.com/problems/set-matrix-zeroes/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).

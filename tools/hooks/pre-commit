@@ -1,0 +1,10 @@
+#!/bin/sh
+# Run the repository checks before each commit.
+# Enable with: git config core.hooksPath tools/hooks
+for candidate in python3 python; do
+    if "$candidate" -c 'import sys; sys.exit(sys.version_info < (3, 9))' >/dev/null 2>&1; then
+        exec "$candidate" tools/repo_check.py check
+    fi
+done
+echo "pre-commit: Python 3.9+ not found; repository checks skipped" >&2
+exit 0

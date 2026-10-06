@@ -1,6 +1,15 @@
 # Quarterly review: <YYYY-Qn>
 ## Output so với kế hoạch
-Đối chiếu dòng quý này trong [roadmap](../ROADMAP.md#theo-quý): output phải có, tiêu chí đạt, output thực tế.
+Đối chiếu dòng quý này trong bảng "Theo quý" của `ROADMAP.md`: output phải có, tiêu chí đạt, output thực tế.
+
+## Audit TRACKING
+Chạy `python tools/repo_check.py check` và `python tools/repo_check.py progress`, rồi ghi:
+
+| Area | Topics | ≥ L2 | ≥ L3 | Trễ hạn | Cần verify lại |
+| --- | --- | --- | --- | --- | --- |
+| TODO | — | — | — | — | — |
+
+So với mục tiêu cổng trong `TRACKING.md`: thiếu gì, vì sao, xử lý thế nào?
 
 ## Evidence review
 | Năng lực | Bằng chứng | Tự thực hiện được? | Gap |
@@ -14,8 +23,8 @@
 | Security | Chưa có | Chưa đánh giá | TODO |
 | Thuật toán (LeetCode) + coding có timebox | Chưa có | Chưa đánh giá | TODO |
 | Giải thích kỹ thuật bằng tiếng Anh | Chưa có | Chưa đánh giá | TODO |
-## Chỉ số
-Cập nhật bảng [chỉ số](../ROADMAP.md#chỉ-số-đến-062027): debug journal, LeetCode, ADR, bài viết, patch upstream.
+## Self-check
+Trả lời lại một nửa số câu đã tick trong `docs/self-check.md`, chọn ngẫu nhiên; câu sai thì bỏ tick.
 ## Demo từ clean checkout
 Commit, môi trường, các bước, kết quả:
 ## Quyết định

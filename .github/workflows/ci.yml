@@ -1,0 +1,48 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  repo-check:
+    name: Repository checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Links, reports, tracking claims, logs
+        run: python3 tools/repo_check.py check
+
+  shellcheck:
+    name: Shell scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: shellcheck
+        run: git ls-files -z '*.sh' | xargs -0 --no-run-if-empty shellcheck --severity=warning
+
+  lab-tests:
+    name: Lab tests (make check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Run make check in every folder that defines it
+        run: |
+          set -eu
+          found=0
+          for makefile in $(git ls-files '*Makefile'); do
+            dir=$(dirname "$makefile")
+            if make -C "$dir" -n check >/dev/null 2>&1; then
+              found=1
+              echo "::group::make -C $dir check"
+              make -C "$dir" check
+              echo "::endgroup::"
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "No folder defines a check target yet."
+          fi

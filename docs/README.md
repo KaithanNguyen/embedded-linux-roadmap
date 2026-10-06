@@ -2,6 +2,8 @@
 
 - [Linux cheat sheet](linux-cheatsheet.md): chỉ thêm command đã chạy và hiểu.
 - [Concept notes](concepts/README.md): giải thích bằng lời của mình, liên kết lab.
+- [Câu hỏi tự kiểm tra](self-check.md): verify mức L1 cho từng area trong [TRACKING](../TRACKING.md).
+- [Design studies](design-studies/README.md): bài tập thiết kế hệ thống 45 phút + design doc.
 - [ADR](adr/README.md): mỗi quyết định kỹ thuật của project một bản ghi; mục tiêu 10 ADR đến 06/2027.
 - [Bài viết tiếng Anh](writeups/README.md): tổng hợp từ debug journal, ADR hoặc lab; mục tiêu 20 bài đến 06/2027.
 - [AI error log](ai-error-log.md): lỗi AI đã mắc và cách phát hiện.

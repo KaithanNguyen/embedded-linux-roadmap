@@ -20,5 +20,5 @@ Tối ưu bộ nhớ quan trọng trên thiết bị RAM nhỏ.
 | 300 | [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/) | Medium | 0 | — | — | Not started | — | — |
 | 1143 | [Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).

@@ -20,5 +20,5 @@ Intrusive list và `container_of` trong Linux kernel; xem [LC08](../../livecodin
 | 143 | [Reorder List](https://leetcode.com/problems/reorder-list/) | Medium | 0 | — | — | Not started | — | — |
 | 2 | [Add Two Numbers](https://leetcode.com/problems/add-two-numbers/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).

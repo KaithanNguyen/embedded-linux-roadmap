@@ -1,7 +1,7 @@
 # C/C++ foundation
 45 phút mỗi buổi: recall 10 → experiment 20 → Socratic review 10 → conclusions 5.
 Làm bài trước khi xem gợi ý/nhờ AI; dùng C11 cho track A/B, C++17 cho track C; ghi chuẩn/compiler cho mỗi biến thể.
-Học tuần tự theo track, mỗi tối T2 một topic (xem [nhịp học](../README.md#nhịp-học-hằng-tuần)); thời gian là dự kiến, điều chỉnh theo evidence.
+Học tuần tự theo track, mỗi tối T2 một topic (xem [nhịp học](../WORKFLOW.md#nhịp-học-hằng-tuần)); thời gian là dự kiến, điều chỉnh theo evidence.
 Concurrency, error-handling và gdb-debugging có thể làm sớm khi sprint tuần 10/2026 cần (mini shell, producer–consumer).
 
 ## Track A — C core (10–11/2026)
@@ -43,3 +43,4 @@ Track B/C dùng lại code của track trước (counter của static-extern, co
 Bài có timebox tách riêng: [livecoding](../livecoding/README.md) (embedded C) và [LeetCode](../leetcode/README.md) (thuật toán).
 
 Mỗi topic có README hướng dẫn và REPORT.md để ghi actual output. Source/tests/evidence do người học tạo trong quá trình làm bài.
+Level và evidence của từng topic (CC01–CC17) theo dõi ở [TRACKING.md](../TRACKING.md#cc).

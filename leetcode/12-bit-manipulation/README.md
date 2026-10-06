@@ -19,5 +19,5 @@ Thao tác register và bitfield; xem [integer-bitwise](../../c-cpp-foundation/in
 | 231 | [Power of Two](https://leetcode.com/problems/power-of-two/) | Easy | 0 | — | — | Not started | — | — |
 | 371 | [Sum of Two Integers](https://leetcode.com/problems/sum-of-two-integers/) | Medium | 0 | — | — | Not started | — | — |
 
-Kết quả: Not started / Solved / Solved có gợi ý / Chưa xong.
+Kết quả: Not started / Solved / Solved có gợi ý / Verified (làm lại sau ≥ 7 ngày, không gợi ý, trong timebox) / Chưa xong.
 Solution lưu cùng folder: `NNNN-slug.c` hoặc `.cpp` (ví dụ `0001-two-sum.c`).
