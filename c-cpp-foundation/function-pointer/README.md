@@ -18,7 +18,7 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 
 ## Deep dive (pro)
 Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
-1. Ops table kiểu `file_operations` cho hai backend (IIO và RPMsg) chọn lúc chạy.
+1. Ops table kiểu `file_operations` cho nguồn mẫu của sensor-svc, chọn lúc chạy: IIO và file replay (thêm RPMsg khi làm phần mở rộng M33).
 2. So sánh với virtual dispatch của C++: sizeof object, vtable, assembly của lời gọi.
 3. Hủy đăng ký callback khi context bị giải phóng: tái hiện use-after-free bằng ASan rồi sửa bằng quy tắc unregister.
 

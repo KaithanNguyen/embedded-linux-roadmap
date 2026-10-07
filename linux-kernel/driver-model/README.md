@@ -20,7 +20,7 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
 1. Hỗ trợ cả I2C và SPI bằng regmap với phần core chung (giống st_lsm6dsx).
 2. Khai báo regmap cache và volatile register; đo số giao dịch bus giảm được.
-3. Viết driver cho một cảm biến I2C khác trong 1 tuần, không theo tutorial (tiêu chí Cổng 1).
+3. Viết driver cho một cảm biến I2C khác (ví dụ BME280) trong 1 tuần, không theo tutorial — tiêu chí Cổng 1, dùng làm bài làm lại L3 của KN08.
 
 ## Làm tay vs dùng AI
 - Làm tay để hiểu: Kiến trúc driver và xử lý lỗi trong probe.

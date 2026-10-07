@@ -1,7 +1,7 @@
 # Architecture Decision Records
 Mỗi quyết định kỹ thuật một file: `NNNN-<quyet-dinh>.md` (ví dụ `0001-imu-transport.md`).
 Viết khi chốt một lựa chọn có trade-off; không sửa ADR cũ để đổi ý mà viết ADR mới thay thế và đánh dấu bản cũ "Superseded".
-Mục tiêu: 10 ADR đến 06/2027; mỗi tháng có milestone project thì có ít nhất 1 ADR.
+Mục tiêu: ít nhất 5 ADR cho quyết định của đường chính trước Cổng 2 (06/2027), 10 ADR đến 09/2027; mỗi tháng có milestone project thì có ít nhất 1 ADR. ADR đầu tiên (12/2026): ngôn ngữ của service.
 
 ## Template
 - Title:

@@ -34,4 +34,4 @@ Status: Not started / Done. Chỉ ghi Done khi có bản ghi trong debug journal
 | DR17 | Mạng | Nagle kết hợp delayed ACK | Latency nhảy khoảng 40 ms | Wireshark, TCP_NODELAY | 04/2027 | Not started |
 | DR18 | Thời gian | Đồng hồ hai board lệch | Thứ tự event sai trong metadata | chronyc, sync GPIO | 05/2027 | Not started |
 | DR19 | Video | Pipeline GStreamer sai caps | Không negotiate được | GST_DEBUG | 05/2027 | Not started |
-| DR20 | MCU | Stack overflow trên M33 | HardFault | Fault handler, MPU | 06/2027 | Not started |
+| DR20 | MCU | Stack overflow trên M33 | HardFault | Fault handler, MPU | 08/2027 | Not started |

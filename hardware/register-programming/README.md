@@ -18,7 +18,7 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 
 ## Deep dive (pro)
 Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
-1. Firmware M33 (06/2027): điều khiển GPIO và timer của STM32MP25 trực tiếp bằng register theo reference manual.
+1. Firmware M33 (08/2027, phần mở rộng): điều khiển GPIO và timer của STM32MP25 trực tiếp bằng register theo reference manual.
 2. Khai báo `regmap_config` cho LSM6DSOX (readable, writeable, volatile register) trong driver ở linux-kernel/driver-model.
 3. Đối chiếu header register do vendor cung cấp (CMSIS/HAL) với reference manual cho một peripheral.
 

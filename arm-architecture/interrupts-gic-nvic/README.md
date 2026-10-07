@@ -19,7 +19,7 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 ## Deep dive (pro)
 Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
 1. Đo latency ngắt → threaded handler → user space với kernel thường và PREEMPT_RT (linux-system/realtime-latency).
-2. Trên M33 (06/2027): cấu hình priority NVIC cho hai ngắt lồng nhau, đo preemption bằng GPIO.
+2. Trên M33 (08/2027, phần mở rộng): cấu hình priority NVIC cho hai ngắt lồng nhau, đo preemption bằng GPIO.
 3. Đọc phần GIC trong device tree của STM32MP25: `interrupt-controller`, `#interrupt-cells`, cách mô tả một ngắt.
 
 ## Làm tay vs dùng AI

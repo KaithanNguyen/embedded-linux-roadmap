@@ -20,7 +20,7 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
 1. Truyền file descriptor qua Unix socket (SCM_RIGHTS).
 2. Ring buffer trong shared memory, báo hiệu bằng eventfd hoặc futex; so với semaphore.
-3. Chọn IPC giữa event-rx và recorder của project; viết ADR kèm số đo.
+3. Nếu tách pipeline GStreamer khỏi edge-svc thành process con để cô lập lỗi, chọn IPC giữa hai bên bằng số đo; viết ADR.
 
 ## Làm tay vs dùng AI
 - Làm tay để hiểu: Chọn IPC theo số đo và ngữ nghĩa lỗi.

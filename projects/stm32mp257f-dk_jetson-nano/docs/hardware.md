@@ -15,7 +15,7 @@ Chỉ tick cột "Đã xác minh" sau khi kiểm bằng tài liệu đúng revis
 | USB-UART 3.3 V | 1 | Console Jetson, UART thứ hai của MP257F | Chỉ dùng loại mức 3.3 V |
 | Logic analyzer 8 kênh | 1 | Giải mã bus, đo latency | sigrok / PulseView |
 | Đồng hồ vạn năng | 1 | Điện áp, thông mạch, dòng | — |
-| LED đỏ + điện trở 330 Ω | 1 | Báo sự kiện | — |
+| LED đỏ + điện trở 330 Ω | 1 | Báo sự kiện; marker cho logic analyzer | — |
 | Buzzer chủ động 5 V + NPN (S8050/2N2222) + 1 kΩ + 1N4148 | 1 | Báo âm | Đóng ngắt phía thấp, GPIO không chạm 5 V |
 | Module relay USB, tiếp điểm ≥ 5 A DC | 1 | Cắt nguồn Jetson trong test R11 | Chỉ đóng ngắt phía DC 5 V |
 | Điện trở 1 kΩ | 2 | Bảo vệ đường sync GPIO giữa hai board | — |
@@ -33,9 +33,9 @@ Header 40 chân của DK có bố cục kiểu Raspberry Pi. Cột "Chân đề 
 | SDA | I2C SDA | 3 | TODO | ☐ |
 | SDO/SA0 | GND → địa chỉ 0x6A (nối 3V3 → 0x6B) | 9 | — | ☐ |
 | CS | 3V3 → chọn chế độ I2C | 17 | — | ☐ |
-| INT1 | GPIO input (data-ready hoặc free-fall) | 11 | TODO | ☐ |
+| INT1 | GPIO input (FIFO watermark của `st_lsm6dsx`, data-ready của driver tự viết, hoặc free-fall) | 11 | TODO | ☐ |
 
-### Chế độ SPI (tuần 21–27/12/2026)
+### Chế độ SPI (mở rộng, 02/2027)
 | Chân LSM6DSOX | Nối tới | Chân đề xuất | Tín hiệu SoC | Đã xác minh? |
 | --- | --- | --- | --- | --- |
 | SCL/SPC | SPI SCK | 23 | TODO | ☐ |
@@ -59,7 +59,7 @@ Giá trị lấy theo datasheet họ LSM6DSO; xác minh lại trên datasheet LS
 
 ## Mạch LED và buzzer
 ```text
-LED (GPIO do M33 điều khiển)
+LED (GPIO do sensor-svc điều khiển qua libgpiod; M33 nếu làm phần mở rộng)
   GPIO 3.3 V ──[ 330 Ω ]──►|── GND        I ≈ (3.3 V − 2.0 V) / 330 Ω ≈ 3.9 mA
 
 Buzzer chủ động 5 V, đóng ngắt phía thấp bằng NPN
@@ -70,13 +70,13 @@ Buzzer chủ động 5 V, đóng ngắt phía thấp bằng NPN
   GPIO 3.3 V ──[ 1 kΩ ]────────────────────────── B
 ```
 Dòng base ≈ (3.3 V − 0.7 V) / 1 kΩ ≈ 2.6 mA. Diode chỉ cần với buzzer từ tính. Chân 5 V chỉ nối vào mạch buzzer, không bao giờ vào GPIO.
-Chân đề xuất: LED → 13, buzzer → 15 trên header MP257F; chọn chân có thể gán cho Cortex-M33 (cấu hình qua device tree/RIF theo wiki ST) — TODO xác minh.
+Chân đề xuất: LED → 13, buzzer → 15 trên header MP257F — TODO xác minh. Nếu làm phần mở rộng M33, chọn chân gán được cho Cortex-M33 (cấu hình qua device tree/RIF theo wiki ST).
 
 ## Đường sync và đo latency
 | Đường | Từ → đến | Nối | Dùng cho |
 | --- | --- | --- | --- |
 | Sync out | GPIO MP257F (chân đề xuất 16) → GPIO input Jetson | Nối tiếp 1 kΩ, GND chung | Đo lệch đồng hồ (R08) |
-| Event marker | GPIO output Jetson do event-rx bật khi nhận EVENT → logic analyzer | Trực tiếp | Latency INT1 → event-rx (R07) |
+| Event marker | GPIO output Jetson do edge-svc bật khi nhận EVENT → logic analyzer | Trực tiếp | Latency INT1 → edge-svc (R07) |
 
 Chân Jetson: chọn chân GPIO trống trên J41 theo pinmux và Jetson.GPIO; xác minh trước khi nối. Cả hai board dùng mức 3.3 V.
 
@@ -88,9 +88,9 @@ Chân Jetson: chọn chân GPIO trống trên J41 theo pinmux và Jetson.GPIO; x
 | CH2 | SDO / MISO | Giải mã SPI |
 | CH3 | CS | Giải mã SPI |
 | CH4 | INT1 | Mốc thời gian sự kiện cảm biến |
-| CH5 | LED GPIO | Latency detection → LED (R09) |
+| CH5 | LED / marker MP257F | Latency INT1 → sensor-svc (HW06, baseline của skeleton) |
 | CH6 | Sync out MP257F | Lệch đồng hồ (R08) |
-| CH7 | Event marker Jetson | Latency INT1 → event-rx (R07) |
+| CH7 | Event marker Jetson | Latency INT1 → edge-svc (R07) |
 
 GND của logic analyzer nối chung với cả hai board. Tần số lấy mẫu ≥ 10 lần tần số bus: I2C 400 kHz → ≥ 4 MS/s.
 
@@ -107,18 +107,20 @@ LAN riêng, không nối vào mạng khác; chỉ mở các cổng trong bảng.
 
 | Thiết bị | IP | Hostname | Vai trò |
 | --- | --- | --- | --- |
-| Host PC | 192.168.50.1 | host.lab | CI runner, Wireshark, data sink |
+| Host PC | 192.168.50.1 | host.lab | rx-host (12/2026–03/2027), CI runner, Wireshark, data sink |
 | STM32MP257F-DK | 192.168.50.10 | mp2.lab | Sensor node, NTP client |
-| Jetson Nano | 192.168.50.20 | jetson.lab | Gateway, recorder, NTP server |
+| Jetson Nano | 192.168.50.20 | jetson.lab | Gateway, edge-svc, NTP server (từ 04/2027) |
 
 | Cổng | Giao thức | Dịch vụ |
 | --- | --- | --- |
 | 22/tcp | SSH | Quản trị, test tự động |
 | 123/udp | NTP | chrony, Jetson là server |
-| 5000/tcp | Protocol v0, TLS từ 04/2027 | sensor-svc ↔ event-rx |
-| 5001/udp | Protocol v0 | Thí nghiệm UDP (R04) |
-| 1883/tcp, 8883/tcp | MQTT, MQTT + TLS | Chỉ khi ADR chọn MQTT |
+| 5000/tcp | Protocol v0, mTLS từ 04/2027 | sensor-svc → rx-host (tới 03/2027), edge-svc (từ 04/2027) |
+| 5001/udp | Protocol v0 | Thí nghiệm UDP (could) |
+| 1883/tcp, 8883/tcp | MQTT, MQTT + TLS | Chỉ khi làm phần could MQTT |
 | 8554/tcp | RTSP | Tùy chọn |
+
+Cổng test của edge-svc (gửi EVENT kiểm thử trong T-F02) chỉ có trong build test; build chạy thật không mở cổng này ([threat model](threat-model.md)).
 
 ## Checklist trước khi cấp nguồn
 - [ ] Đối chiếu từng dây với bảng pin map và ảnh chụp

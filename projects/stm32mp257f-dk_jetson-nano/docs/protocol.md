@@ -1,6 +1,6 @@
 # Protocol v0
-Status: Bản nháp — chốt bằng ADR "Framing + integrity" (04/2027), sau lab [struct-union](../../../c-cpp-foundation/struct-union/README.md).
-Dùng chung cho mọi kênh: RPMsg (M33 ↔ A35), TCP/TLS và UDP (MP257F ↔ Jetson). Encode/decode bằng shift/mask trên byte buffer; không cast byte buffer sang struct.
+Status: Bản nháp — chốt bằng ADR "Framing + integrity" (12/2026), sau lab [struct-union](../../../c-cpp-foundation/struct-union/README.md), trước khi code skeleton.
+Kênh chính: TCP từ sensor-svc tới receiver (rx-host trên laptop tới 03/2027, edge-svc trên Jetson từ 04/2027), mTLS từ 04/2027. Cùng định dạng frame dùng cho RPMsg (mở rộng M33) và UDP (thí nghiệm). Encode/decode bằng shift/mask trên byte buffer; không cast byte buffer sang struct.
 
 ## Frame
 Mọi trường nhiều byte theo big-endian (network byte order). Header 20 byte + payload + CRC-32 4 byte.
@@ -18,7 +18,7 @@ Mọi trường nhiều byte theo big-endian (network byte order). Header 20 byt
 | 20 | N | payload | Theo loại message |
 | 20 + N | 4 | crc32 | CRC-32/ISO-HDLC (như zlib) trên byte `[0, 20 + N)` |
 
-Kênh RPMsg giới hạn 496 byte payload mỗi message: một message RPMsg chứa đúng một frame, nên frame qua RPMsg ≤ 496 byte (IMU_BATCH 10 mẫu = 158 byte).
+Phần mở rộng M33: kênh RPMsg giới hạn 496 byte payload mỗi message; một message RPMsg chứa đúng một frame, nên frame qua RPMsg ≤ 496 byte (IMU_BATCH 10 mẫu = 158 byte).
 
 ## Message
 | Type | Tên | Chiều | Payload |
@@ -27,13 +27,21 @@ Kênh RPMsg giới hạn 496 byte payload mỗi message: một message RPMsg ch�
 | `0x02` | HEARTBEAT | Cả hai, mỗi 1 s | uptime_s, frames_tx, frames_rx, crc_errors, reconnects, events_dropped — mỗi trường uint32 |
 | `0x10` | IMU_BATCH | MP257F → Jetson | first_sample_ns uint64, sample_period_ns uint32, count uint16, rồi count × (ax, ay, az, gx, gy, gz) int16 |
 | `0x20` | EVENT | MP257F → Jetson, luôn có `ACK_REQ` | event_id 16 byte (UUID ngẫu nhiên), kind uint8 (1 FALL, 2 SHOCK, 3 MANUAL), reserved uint8, t_event_ns uint64, peak_mg uint16, duration_ms uint16 |
-| `0x30` | DETECTION | Jetson → MP257F | class_id uint16, confidence_permille uint16, t_frame_ns uint64 |
-| `0x31` | LED_CMD | Jetson → MP257F | pattern uint8 (0 off, 1 on, 2 blink), duration_ms uint16, buzzer uint8 (0/1) |
+| `0x30` | DETECTION *(mở rộng)* | Jetson → MP257F | class_id uint16, confidence_permille uint16, t_frame_ns uint64 |
+| `0x31` | LED_CMD *(mở rộng)* | Jetson → MP257F | pattern uint8 (0 off, 1 on, 2 blink), duration_ms uint16, buzzer uint8 (0/1) |
 | `0x7F` | ACK | Cả hai | acked_seq uint32, status uint8 (0 OK, 1 REJECTED, 2 DUPLICATE) |
 
 Giá trị HELLO cho cấu hình thiết kế: accel ±16 g → 488 µg/LSB; gyro ±2000 dps → 70000 µdps/LSB; ODR 104 Hz → 104000 mHz.
 
+| Giai đoạn | Message dùng |
+| --- | --- |
+| Skeleton v0 (12/2026) | HELLO, HEARTBEAT, IMU_BATCH; chưa có ACK |
+| Skeleton v1 (01/2027) | Thêm EVENT, ACK, outbox và gửi lại |
+| Từ 04/2027 | Như v1, qua mTLS tới edge-svc |
+| Mở rộng | DETECTION, LED_CMD; RPMsg từ M33 |
+
 ## Quy tắc
+- **TCP là luồng byte:** một lần `read()` có thể chứa nửa frame hoặc nhiều frame. Bên nhận tích lũy byte và decode lặp lại chừng nào còn một frame đủ byte (R20); bên gửi giữ offset khi `send()` gửi thiếu.
 - **Validate theo thứ tự:** magic → version → payload_len ≤ 4096 → đủ byte → CRC. Lỗi ở bất kỳ bước nào: tăng counter tương ứng; TCP thì đóng kết nối và để bên gửi kết nối lại, UDP thì bỏ datagram.
 - **Message lạ:** type chưa biết thì bỏ qua và tăng counter, để phiên bản sau thêm message mà không làm hỏng bên nhận cũ. Version lạ thì từ chối kết nối và ghi log.
 - **ACK và gửi lại:** EVENT nằm trong outbox của bên gửi tới khi nhận ACK. Chưa có ACK sau 500 ms thì gửi lại với cờ `RETRANSMIT`; sau khi kết nối lại thì gửi lại toàn bộ outbox theo thứ tự.
@@ -44,16 +52,16 @@ Giá trị HELLO cho cấu hình thiết kế: accel ±16 g → 488 µg/LSB; gyr
 ## Ánh xạ transport
 | Transport | Cách đóng gói | Ghi chú |
 | --- | --- | --- |
-| TCP 5000 | Luồng frame nối tiếp | TLS từ 04/2027; một kết nối mỗi thiết bị |
-| UDP 5001 | Một frame mỗi datagram | Chỉ IMU_BATCH, không gửi lại; dùng để đo mất gói |
-| RPMsg | Một frame mỗi message | ≤ 496 byte |
-| MQTT (nếu ADR chọn) | Cả frame là payload nhị phân | `edgecap/<device_id>/imu` QoS 0, `edgecap/<device_id>/event` QoS 1 |
+| TCP 5000 | Luồng frame nối tiếp | mTLS từ 04/2027; một kết nối mỗi thiết bị |
+| UDP 5001 *(could)* | Một frame mỗi datagram | Chỉ IMU_BATCH, không gửi lại; thí nghiệm so sánh mất gói với TCP |
+| RPMsg *(mở rộng)* | Một frame mỗi message | ≤ 496 byte |
+| MQTT *(could)* | Cả frame là payload nhị phân | `edgecap/<device_id>/imu` QoS 0, `edgecap/<device_id>/event` QoS 1 |
 
 ## ACK và gửi lại
 ```mermaid
 sequenceDiagram
   participant S as sensor-svc
-  participant R as event-rx
+  participant R as edge-svc
   S->>R: HELLO
   R->>S: HELLO
   S->>R: EVENT seq=41 (ACK_REQ)

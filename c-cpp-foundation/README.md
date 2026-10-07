@@ -6,7 +6,7 @@ Concurrency, error-handling và gdb-debugging có thể làm sớm khi sprint tu
 
 Mỗi topic có bài cơ bản (đạt L2), phần **Deep dive (pro)** gồm ba bài nâng cao chạy cả trên board aarch64 (cần ít nhất một bài để đạt L3), và phần **Làm tay vs dùng AI**: thứ phải tự hiểu để kiểm chứng code, thứ có thể để AI viết rồi kiểm.
 
-## Track A — C core (10–11/2026)
+## Track A — C core (10–11/2026, Cổng 1)
 Rotation: Pointer → Memory → volatile → struct/union → function pointer → build & link → undefined behavior.
 
 | Topic | Nội dung |
@@ -19,7 +19,7 @@ Rotation: Pointer → Memory → volatile → struct/union → function pointer 
 | [Build & link](build-link/README.md) | static/extern, translation unit, symbol, linker script, startup code, shared library, glibc version |
 | [Undefined behavior](undefined-behavior/README.md) | Tối ưu dựa trên UB, sanitizer, fuzzing |
 
-## Track B — C cho hệ thống (11/2026–12/2026)
+## Track B — C cho hệ thống (11/2026–12/2026, Cổng 1)
 Rotation: Integer/bitwise → Error handling → Concurrency → GDB.
 
 | Topic | Nội dung |
@@ -29,7 +29,9 @@ Rotation: Integer/bitwise → Error handling → Concurrency → GDB.
 | [Concurrency](concurrency/README.md) | Mutex/condvar, C11 atomics, SPSC lock-free trên Arm, priority inversion |
 | [GDB & debugging tools](gdb-debugging/README.md) | Watchpoint, core dump, gdbserver, GDB Python |
 
-## Track C — C++ cho embedded (01/2027)
+## Track C — C++ cho embedded (01–02/2027, Cổng 2)
+C++ được củng cố bằng một service thực tế: edge-svc trên Jetson ([project](../projects/stm32mp257f-dk_jetson-nano/README.md#components)). Không mở thêm nhánh ngôn ngữ khác; Python chỉ dùng cho script test và đo.
+
 | Topic | Nội dung |
 | --- | --- |
 | [Modern C++ cho embedded](cpp-modern-embedded/README.md) | RAII, move, constexpr, container không heap, CRTP, code size, -fno-exceptions |

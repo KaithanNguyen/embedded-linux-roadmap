@@ -1,6 +1,6 @@
 # LeetCode
 Luyện thuật toán theo chủ đề để giữ phản xạ giải bài và phân tích độ phức tạp.
-Mục tiêu: 60 bài pattern cốt lõi đến 06/2027, ít nhất 30 bài Verified; nhịp 1–2 bài mỗi tuần (xem [roadmap](../ROADMAP.md#chỉ-số-đến-062027) và [TRACKING AL01](../TRACKING.md#algorithms--timed-coding)).
+Mục tiêu: 60 bài pattern cốt lõi đến 06/2027, ít nhất 30 bài Verified; nhịp 1–2 bài mỗi tuần (xem [roadmap](../ROADMAP.md#chỉ-số) và [TRACKING AL01](../TRACKING.md#algorithms--timed-coding)).
 Danh sách đã thu gọn từ 102 xuống 62 bài: làm lại được một bài không gợi ý có giá trị hơn làm thêm nhiều bài một lần. Backtracking và các dạng DP/graph nâng cao đã bỏ vì ít gặp trong công việc embedded.
 
 ## Cách làm một bài

@@ -24,7 +24,7 @@ ST cung cấp STM32MPU Ecosystem với OpenSTLinux (dựa trên Yocto). Học th
 | Starter Package | Flash image prebuilt, boot, thử board | Tuần 02–08/11/2026 |
 | Developer Package | SDK cross compile app, gdbserver; sửa kernel/device tree ngoài Yocto | Từ tuần 09–15/11/2026 |
 | Distribution Package | Build toàn bộ image bằng Yocto, thêm layer/recipe riêng | 03/2027 (Cổng 1) |
-| [STM32CubeMP2](https://github.com/STMicroelectronics/STM32CubeMP2) | Firmware Cortex-M33, RPMsg với Linux | 06/2027 |
+| [STM32CubeMP2](https://github.com/STMicroelectronics/STM32CubeMP2) | Firmware Cortex-M33, RPMsg với Linux | 08/2027 (mở rộng) |
 
 Ghi version ecosystem, Yocto release và kernel thực tế (`uname -a`, `cat /etc/os-release`) cho mỗi lab.
 

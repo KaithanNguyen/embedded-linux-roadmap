@@ -28,6 +28,7 @@ Rules that keep this repository consistent, reproducible and safe to publish. `p
 | Topic `REPORT.md` | `Not run`, `In progress`, `Blocked`, `Done` — `Done` requires a Pass/Fail row and an existing evidence link under Results |
 | Result rows | `Pass`, `Fail`, `Not run` |
 | `TRACKING.md` level | `L0`–`L4`; L2+ needs existing evidence, L3+ a verification date, L4 evidence under `projects/`, `debug-logs/`, `docs/` or `sprints/` |
+| `TRACKING.md` gate (`Cổng`) | `Cổng 1`, `Cổng 2` (required for that gate; overdue rows are reported), `Mở rộng` (extension after the core path is stable), `Luyện tập` (practice measured by counts), `Tùy chọn` (optional) |
 | LeetCode result | `Not started`, `Solved`, `Solved có gợi ý`, `Verified`, `Chưa xong` |
 
 ## Evidence policy
@@ -47,9 +48,9 @@ Rules that keep this repository consistent, reproducible and safe to publish. `p
 
 | Language | Standard and style | Baseline flags |
 | --- | --- | --- |
-| C | C11; Linux kernel coding style (tabs, 8 columns); kernel code must pass `checkpatch.pl` | `-std=c11 -Wall -Wextra -Wpedantic -g` |
-| C++ | C++17 (C++20 only where the toolchain allows it); 4-space indent | `-std=c++17 -Wall -Wextra -Wpedantic -g` |
-| Python | PEP 8, standard library first | — |
+| C | C11; Linux kernel coding style (tabs, 8 columns); kernel code must pass `checkpatch.pl`. Used for drivers, the sensor service and the protocol library | `-std=c11 -Wall -Wextra -Wpedantic -g` |
+| C++ | C++17 (C++20 only where the toolchain allows it); 4-space indent. Used for one application service on the Jetson (`edge-svc`) and the C++ labs | `-std=c++17 -Wall -Wextra -Wpedantic -g` |
+| Python | PEP 8, standard library first. Test and measurement scripts only, never product code | — |
 | Shell | Bash, `set -u`, clean under `shellcheck --severity=warning` | — |
 
 Use `-fsanitize=address,undefined` (or `thread`) wherever the toolchain supports it, and say so when it does not.

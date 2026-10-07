@@ -7,13 +7,15 @@ So với dòng tháng này trong bảng "Theo tháng" của `ROADMAP.md`.
 | --- | --- | --- | --- |
 | TODO | TODO | TODO | Chưa có |
 ## Checklist tháng
+- [ ] Hệ thống của project vẫn chạy (từ 12/2026): chạy script đo, so với tháng trước và baseline; test của các bước trước vẫn pass
+- [ ] Threat model đã xét thay đổi của tháng; mitigation mới có test
 - [ ] Đọc lại debug journal, rút ra một khuôn mẫu lỗi
 - [ ] Một debug drill, có bản ghi trong debug journal
 - [ ] Hoàn thành một milestone project, kèm một ADR
 - [ ] Một mini project 90 phút cùng AI; cập nhật AI error log
 - [ ] Một bài viết kỹ thuật tiếng Anh
 - [ ] Spot check: làm lại 2 topic L3 chọn ngẫu nhiên trong `TRACKING.md`; ghi kết quả bên dưới
-- [ ] Xử lý các topic trễ hạn mà `python tools/repo_check.py check` cảnh báo
+- [ ] Xử lý các topic Cổng 1/Cổng 2 trễ hạn mà `python tools/repo_check.py check` cảnh báo; topic nào đổi cổng thì ghi lý do bên dưới
 - [ ] Cập nhật bảng tháng trong roadmap; thêm các dòng tuần của tháng tới vào `sprints/README.md`
 - [ ] Tạo file log của tháng tới
 ## Spot check
@@ -27,6 +29,6 @@ Triệu chứng → hypothesis → evidence → fix → regression:
 ## Khuôn mẫu lỗi
 Loại lỗi hay gặp; giả định hay mắc (từ debug journal và AI error log):
 ## Kế hoạch so với thực tế
-Scope bỏ/hoãn và lý do. Chưa đạt thì cắt bớt phạm vi tháng tới thay vì dồn việc; ghi một dòng lý do:
+Scope bỏ/hoãn và lý do. Chưa đạt thì cắt phần Mở rộng trước, không dồn việc sang tháng sau; ghi một dòng lý do và topic nào đổi cổng:
 ## Tháng tiếp theo
 Một outcome; 3 đầu ra; gate đo được:
