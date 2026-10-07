@@ -10,7 +10,7 @@ Sử dụng Linux workstation để chạy lab, thu evidence và quản lý bằ
 - [ ] Hoàn thành 5 bài trong [exercises](exercises/README.md).
 - [ ] Chạy [system_report.sh](scripts/system_report.sh), đọc và giải thích output.
 - [ ] Điền [microSD debug report](debug/microsd-debug-01.md) bằng evidence thật; nếu không có lỗi, ghi kết quả kiểm tra.
-- [ ] [Cheat sheet](../../docs/linux-cheatsheet.md) có 50 lệnh tự viết, mỗi lệnh đã chạy và có output thật.
+- [ ] [Cheat sheet](../../docs/linux-cheatsheet.md) ghi các lệnh đã dùng thật trong tuần, mỗi lệnh có output thật và giải thích được (không đặt chỉ tiêu số lượng).
 - [ ] Repo học có README và [log tháng](../../log/2026-10.md) ghi mỗi ngày.
 - [ ] Có commit và review tuần ([weekly review](../../templates/weekly-review.md)).
 

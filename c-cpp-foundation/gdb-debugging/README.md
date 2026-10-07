@@ -1,7 +1,7 @@
 # GDB & debugging tools
 Status: Not started
 ## Learning goals
-Breakpoint, watchpoint, backtrace, core dump, Valgrind, gdbserver cross-debug
+Breakpoint, watchpoint, backtrace, core dump, Valgrind, gdbserver cross-debug, GDB Python
 
 ## Recall — 10 phút
 Không dùng AI: Vì sao cần `-g`, và vì sao `-O2` làm biến bị "optimized out"? Core dump chứa gì và cần thêm gì để đọc được?
@@ -16,10 +16,21 @@ Build `-O0` vs `-O2`; core dump không sinh ra (ghi lý do: ulimit, core_pattern
 src/crash.c; transcript GDB session; cấu hình core dump đã dùng.
 Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence phải trỏ đến file thật khi hoàn thành.
 
+## Deep dive (pro)
+Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
+1. Remote debug sensor-svc trên MP257F bằng gdbserver + gdb-multiarch, có sysroot đúng để thấy symbol thư viện.
+2. Watchpoint phần cứng tìm biến bị ghi đè; tìm hiểu giới hạn số watchpoint của lõi Arm.
+3. GDB Python: lệnh tự viết in ring buffer/outbox của project dạng dễ đọc.
+
+## Làm tay vs dùng AI
+- Làm tay để hiểu: Đặt giả thuyết và chọn điểm dừng — kỹ năng cốt lõi khi debug.
+- Dùng AI rồi kiểm chứng: Viết script GDB Python; đọc lại từng dòng trước khi dùng.
+
 ## Build guidance
 Dùng `-std=c11 -Wall -Wextra -Wpedantic -g`; ghi compiler/version và command chính xác.
 Có thể thêm `-fsanitize=address,undefined -fno-omit-frame-pointer` khi toolchain hỗ trợ; ghi rõ nếu không có.
 Không dùng kết quả sanitizer để kết luận đã bắt được mọi lỗi.
+Deep dive chạy thêm trên board aarch64 (MP257F hoặc Jetson) để thấy khác biệt kiến trúc.
 Không commit file core (có thể chứa dữ liệu bộ nhớ); chỉ lưu đoạn backtrace đã rà soát.
 
 ## Socratic review — 10 phút
@@ -36,3 +47,4 @@ Không commit file core (có thể chứa dữ liệu bộ nhớ); chỉ lưu đ
 - [ ] Có expected vs actual cho case liên quan.
 - [ ] Có evidence và phân tích giới hạn.
 - [ ] Tự giải thích topic bằng tiếng Việt và 5 câu tiếng Anh.
+- [ ] L3: làm lại sau ≥ 7 ngày không ghi chú, không AI, và hoàn thành ít nhất một bài Deep dive.

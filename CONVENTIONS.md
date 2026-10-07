@@ -12,7 +12,7 @@ Rules that keep this repository consistent, reproducible and safe to publish. `p
 | Item | Rule | Example |
 | --- | --- | --- |
 | Folders and files | kebab-case, ASCII | `c-cpp-foundation/function-pointer/` |
-| Topic lab | `README.md` (guide) + `REPORT.md` (results) per folder **(checked)** | `hardware/i2c/` |
+| Topic lab | `README.md` (guide, deep dive, AI split) + `REPORT.md` (results) per folder under `c-cpp-foundation/`, `arm-architecture/`, `linux-system/`, `linux-kernel/`, `hardware/` **(checked)** | `linux-kernel/device-tree/` |
 | Weekly sprint | `sprints/YYYY-MM-DD_topic/` (Monday of the week) | `sprints/2026-10-05_linux-workstation/` |
 | Daily log | `log/YYYY-MM.md`, one line per day: `YYYY-MM-DD · area · output · commit/link` **(checked)** | `log/2026-10.md` |
 | Evidence | `YYYY-MM-DD_<board>_<topic>_<case>.<ext>` next to the report that uses it | `2026-11-07_mp2_boot_sdcard.log` |
@@ -64,4 +64,5 @@ Use `-fsanitize=address,undefined` (or `thread`) wherever the toolchain supports
 
 - [Conventional Commits](https://www.conventionalcommits.org/): `type(scope): summary`, with `type` one of `feat`, `fix`, `docs`, `test`, `build`, `ci`, `refactor`, `chore`.
 - One logical change per commit; the body explains why when the summary cannot.
+- Pull requests state which parts were drafted with AI and how they were verified ([approach](docs/ai-assisted-engineering.md)).
 - Larger changes go through a branch and a pull request using the [template](.github/pull_request_template.md): what changed, why, how it was tested.

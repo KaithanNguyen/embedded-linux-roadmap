@@ -8,6 +8,7 @@ So với dòng tháng này trong bảng "Theo tháng" của `ROADMAP.md`.
 | TODO | TODO | TODO | Chưa có |
 ## Checklist tháng
 - [ ] Đọc lại debug journal, rút ra một khuôn mẫu lỗi
+- [ ] Một debug drill, có bản ghi trong debug journal
 - [ ] Hoàn thành một milestone project, kèm một ADR
 - [ ] Một mini project 90 phút cùng AI; cập nhật AI error log
 - [ ] Một bài viết kỹ thuật tiếng Anh

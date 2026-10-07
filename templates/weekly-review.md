@@ -7,12 +7,12 @@ Một outcome chính (lấy từ bảng tuần trong `sprints/README.md`):
 - [ ] 2 buổi Embedded Linux (T3, T6) + lab chính T7 đạt mục tiêu đã đặt
 - [ ] 2 commit có ý nghĩa
 - [ ] 1 bản ghi debug journal (hoặc "đã thử gì, giả thuyết gì")
-- [ ] 2–3 bài LeetCode, vừa làm vừa nói to cách nghĩ
-- [ ] 1 bài viết hoặc bản ghi âm tiếng Anh tổng hợp tuần
+- [ ] 1–2 bài LeetCode hoặc 1 bài live coding, vừa làm vừa nói to cách nghĩ
+- [ ] 1 bản ghi âm tiếng Anh tổng hợp tuần
 - [ ] Log ngày đủ các buổi đã học
 ## Verify tuần
 - [ ] Topic mới lên L2 (có REPORT + evidence):
-- [ ] Topic làm lại sau ≥ 7 ngày, không ghi chú, không AI → L3 (ghi ngày):
+- [ ] Topic làm lại sau ≥ 7 ngày, không ghi chú, không AI, kèm một bài Deep dive → L3 (ghi ngày):
 - [ ] Topic hạ level (lý do):
 - [ ] `python tools/repo_check.py check` sạch lỗi; `progress --write` đã chạy
 ## Definition of Done

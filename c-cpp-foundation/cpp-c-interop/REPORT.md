@@ -2,7 +2,7 @@
 Status: Not run
 
 ## Goal
-Build module counter (topic static-extern) thành thư viện C và gọi từ C++; quan sát symbol bằng `nm` + `c++filt` khi có/không `extern "C"`.
+Build module counter (topic build-link) thành thư viện C và gọi từ C++; quan sát symbol bằng `nm` + `c++filt` khi có/không `extern "C"`.
 
 Artifact cần tạo: src C + C++ + Makefile; trích nm/c++filt; bảng size.
 
@@ -33,6 +33,13 @@ Cleanup chỉ áp dụng với tài nguyên của lab:
 | Normal | TODO | TODO | Chưa chạy | Not run | — |
 | Boundary | TODO | TODO | Chưa chạy | Not run | — |
 | Error | TODO | TODO | Chưa chạy | Not run | — |
+
+## Deep dive
+| Bài | Kết quả | Evidence |
+| --- | --- | --- |
+| 1 | Not run | — |
+| 2 | Not run | — |
+| 3 | Not run | — |
 
 ## Analysis
 Giải thích chênh lệch dự đoán/kết quả; giới hạn của phép thử.

@@ -1,7 +1,7 @@
 # I2C
 Status: Not started
 ## Learning goals
-Open-drain + pull-up, địa chỉ 7-bit, ACK/NACK, register read/write, i2c-tools, `/dev/i2c-N`, ioctl
+Open-drain + pull-up, địa chỉ 7-bit, ACK/NACK, repeated start, clock stretching, register read/write, i2c-tools, `/dev/i2c-N`, ioctl
 
 ## Recall — 10 phút
 Không dùng AI: Vì sao I2C cần pull-up? Datasheet ghi địa chỉ 7-bit hay 8-bit, khác nhau thế nào? NACK cho biết điều gì?
@@ -15,6 +15,16 @@ Không dùng AI: Vì sao I2C cần pull-up? Datasheet ghi địa chỉ 7-bit hay
 ## Required artifacts
 Wiring; output i2cdetect/i2cget; ảnh logic analyzer; src/lsm6dsox_i2c.c + mẫu dữ liệu đọc được.
 Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence phải trỏ đến file thật khi hoàn thành.
+
+## Deep dive (pro)
+Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
+1. Bus recovery: giả lập SDA bị giữ thấp, phục hồi bằng 9 xung SCL; xem driver I2C của kernel xử lý ra sao.
+2. Quan sát repeated start và clock stretching trên logic analyzer; giải thích từng pha của giao dịch đọc register.
+3. Chuyển từ /dev/i2c sang driver kernel (linux-kernel/driver-model); giải thích lỗi `Device or resource busy`.
+
+## Làm tay vs dùng AI
+- Làm tay để hiểu: Đọc waveform và giải thích lỗi bus.
+- Dùng AI rồi kiểm chứng: Code ioctl I2C_RDWR mẫu; kiểm bằng logic analyzer.
 
 ## Safety & setup
 - Tắt nguồn khi đấu/tháo dây; đối chiếu pin map của đúng board revision trước khi cấp điện.
@@ -38,3 +48,4 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 - [ ] Có expected vs actual cho case liên quan.
 - [ ] Có evidence thật (log/số đo/ảnh) và phân tích giới hạn.
 - [ ] Tự giải thích topic bằng tiếng Việt và 5 câu tiếng Anh.
+- [ ] L3: làm lại sau ≥ 7 ngày không ghi chú, không AI, và hoàn thành ít nhất một bài Deep dive.

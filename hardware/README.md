@@ -41,18 +41,20 @@ Cột "Có sẵn?" chỉ ghi "Có" khi thiết bị đã ở trong tay; không c
 Chưa cần camera B-CAMS-IMX cho STM32MP257F-DK: phần camera làm trên Jetson rẻ và nhanh hơn.
 
 ## Topic labs
-Rotation: Electrical basics → UART → GPIO → I2C → SPI. Cùng nhịp 45 phút; một lab phần cứng có thể kéo dài nhiều buổi.
-Mỗi topic có README hướng dẫn và REPORT.md để ghi actual output, giống [C/C++ foundation](../c-cpp-foundation/README.md).
+Rotation: Electrical basics → UART → GPIO → I2C → Register-level → Sensor signal → SPI. Cùng nhịp 45 phút; một lab phần cứng có thể kéo dài nhiều buổi.
+Mỗi topic có README (hướng dẫn, Deep dive, phần làm tay và phần dùng AI) và REPORT.md để ghi actual output, giống [C/C++ foundation](../c-cpp-foundation/README.md).
 
-| Topic | Nội dung | Board |
-| --- | --- | --- |
-| [Electrical basics & datasheet](electrical-basics/README.md) | Logic level, pull-up, open-drain, hạn dòng, pin map | Cả hai |
-| [UART & serial console](uart/README.md) | Baud, 8N1, TX/RX, GND chung, boot log | Cả hai |
-| [GPIO](gpio/README.md) | libgpiod, active-low, pull-up, pinmux | Cả hai |
-| [I2C](i2c/README.md) | Pull-up, địa chỉ 7-bit, ACK/NACK, i2c-tools, ioctl | Cả hai |
-| [SPI](spi/README.md) | Mode, chip select, speed, spidev loopback | Cả hai |
+| Topic | Nội dung | Board | Dự kiến |
+| --- | --- | --- | --- |
+| [Electrical basics & datasheet](electrical-basics/README.md) | Logic level, pull-up, hạn dòng, pin map, cây nguồn | Cả hai | 11/2026 |
+| [UART & serial console](uart/README.md) | Baud, 8N1, termios, flow control | Cả hai | 11/2026 |
+| [GPIO](gpio/README.md) | libgpiod, edge event, gpio-leds/gpio-keys | Cả hai | 11/2026 |
+| [I2C](i2c/README.md) | ACK/NACK, repeated start, bus recovery, ioctl | MP257F | 12/2026 |
+| [Register-level programming](register-programming/README.md) | Register map, read-modify-write, đối chiếu code AI với datasheet | MP257F | 12/2026 |
+| [Sensor data & signal basics](sensor-signal/README.md) | Sampling, noise, calibration, lọc fixed-point | MP257F | 12/2026 |
+| [SPI](spi/README.md) | Mode, chip select, DMA, đọc FIFO theo burst | MP257F | 12/2026 |
 
-Device tree, boot chain và Yocto sẽ có folder riêng khi đến giai đoạn 01–04/2027 của [roadmap](../ROADMAP.md).
+Boot chain, device tree và driver ở [linux-kernel](../linux-kernel/README.md); kiến trúc CPU và interrupt controller ở [arm-architecture](../arm-architecture/README.md).
 
 ## Tài liệu tham khảo
 Ghi tên tài liệu + version/revision mỗi khi dùng; ưu tiên tài liệu gốc của hãng.

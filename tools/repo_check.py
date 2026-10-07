@@ -30,7 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TODAY = dt.date.today()
 DEFAULT_DENYLIST = Path.home() / ".config" / "embedded-linux-roadmap" / "denylist.txt"
 
-TOPIC_PARENTS = ("c-cpp-foundation", "hardware")
+TOPIC_PARENTS = ("c-cpp-foundation", "arm-architecture", "linux-system", "linux-kernel", "hardware")
 TOPIC_EXCLUDE = ("hardware/boards",)
 README_STATUS = ("Not started", "In progress", "Blocked", "Done")
 REPORT_STATUS = ("Not run", "In progress", "Blocked", "Done")
@@ -402,6 +402,9 @@ def metrics(lc_topics: list[LcTopic], days: set[dt.date]) -> list[tuple[str, str
     verified = sum(1 for t in lc_topics for _, result in t.done if result == "Verified")
     debug_index = ROOT / "debug-logs" / "README.md"
     debug = sum(1 for row in table_rows(read(debug_index))[1:] if row and row[-1] != "Template")
+    drills_index = ROOT / "debug-drills" / "README.md"
+    drill_rows = table_rows(read(drills_index))[1:] if drills_index.is_file() else []
+    drills_done = sum(1 for row in drill_rows if row and row[-1] == "Done")
     self_check = ROOT / "docs" / "self-check.md"
     text = read(self_check) if self_check.is_file() else ""
     answered = len(re.findall(r"^\s*- \[[xX]\]", text, re.M))
@@ -409,9 +412,10 @@ def metrics(lc_topics: list[LcTopic], days: set[dt.date]) -> list[tuple[str, str
     return [
         ("Days with logged output", str(len(days)), "—"),
         ("Debug journal entries", str(debug), "30"),
-        ("LeetCode solved / verified", f"{solved} / {verified}", "100 / —"),
+        ("Debug drills completed", f"{drills_done} / {len(drill_rows)}", "12"),
+        ("LeetCode solved / verified", f"{solved} / {verified}", "60 / 30"),
         ("ADRs", str(count_glob("docs/adr", "[0-9][0-9][0-9][0-9]-*.md")), "10"),
-        ("English write-ups", str(count_glob("docs/writeups", "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*.md")), "20"),
+        ("English write-ups", str(count_glob("docs/writeups", "[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*.md")), "12"),
         ("Self-check questions answered", f"{answered} / {questions}", f"{questions} / {questions}"),
     ]
 

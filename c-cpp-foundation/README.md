@@ -4,43 +4,39 @@ Làm bài trước khi xem gợi ý/nhờ AI; dùng C11 cho track A/B, C++17 cho
 Học tuần tự theo track, mỗi tối T2 một topic (xem [nhịp học](../WORKFLOW.md#nhịp-học-hằng-tuần)); thời gian là dự kiến, điều chỉnh theo evidence.
 Concurrency, error-handling và gdb-debugging có thể làm sớm khi sprint tuần 10/2026 cần (mini shell, producer–consumer).
 
+Mỗi topic có bài cơ bản (đạt L2), phần **Deep dive (pro)** gồm ba bài nâng cao chạy cả trên board aarch64 (cần ít nhất một bài để đạt L3), và phần **Làm tay vs dùng AI**: thứ phải tự hiểu để kiểm chứng code, thứ có thể để AI viết rồi kiểm.
+
 ## Track A — C core (10–11/2026)
-Rotation: Pointer → Memory → static/extern → volatile → struct/union → function pointer → linker → undefined behavior.
+Rotation: Pointer → Memory → volatile → struct/union → function pointer → build & link → undefined behavior.
 
 | Topic | Nội dung |
 | --- | --- |
-| [Pointer](pointer/README.md) | Địa chỉ, dereference, array decay, const, lifetime |
-| [Memory](memory/README.md) | Automatic/static/allocated storage, ownership, allocation failure |
-| [static / extern](static-extern/README.md) | Scope, linkage, storage duration, declaration vs definition |
-| [volatile](volatile/README.md) | Observable access, MMIO, atomicity, synchronization |
-| [struct / union](struct-union/README.md) | Layout, padding, alignment, endianness, serialization |
-| [Function pointer](function-pointer/README.md) | Callback signatures, dispatch, context pointer, ownership |
-| [Linker](linker/README.md) | Translation units, symbols, sections, relocation, link order |
-| [Undefined behavior](undefined-behavior/README.md) | Bounds, lifetime, signed overflow, uninitialized read |
+| [Pointer](pointer/README.md) | Lifetime, array decay, alignment, strict aliasing, `container_of` |
+| [Memory](memory/README.md) | Storage duration, ownership, pool allocator, stack usage, leak |
+| [volatile](volatile/README.md) | MMIO, `readl`/`writel`, vì sao không thay atomic/barrier |
+| [struct / union](struct-union/README.md) | Layout, packed, bitfield, serialization cho protocol v0 |
+| [Function pointer](function-pointer/README.md) | Callback + context, ops table kiểu kernel, so với virtual dispatch C++ |
+| [Build & link](build-link/README.md) | static/extern, translation unit, symbol, linker script, startup code, shared library, glibc version |
+| [Undefined behavior](undefined-behavior/README.md) | Tối ưu dựa trên UB, sanitizer, fuzzing |
 
-## Track B — C cho Linux/embedded (12/2026–01/2027)
-Rotation: Integer/bitwise → Preprocessor/build → Error handling → Concurrency → GDB.
-
-| Topic | Nội dung |
-| --- | --- |
-| [Integer & bitwise](integer-bitwise/README.md) | Fixed-width types, promotion, signed/unsigned, shift, mask, bitfield |
-| [Preprocessor & build](preprocessor-build/README.md) | Macro pitfalls, conditional compilation, Make dependency, CMake |
-| [Error handling](error-handling/README.md) | Return code, errno, goto cleanup, short read/write, EINTR |
-| [Concurrency](concurrency/README.md) | pthread, data race, mutex/condvar, C11 atomics |
-| [GDB & debugging tools](gdb-debugging/README.md) | Breakpoint, watchpoint, core dump, Valgrind, gdbserver |
-
-## Track C — C++ cho embedded (01–02/2027)
-Rotation: RAII → Classes/polymorphism → Templates/STL → C/C++ interop.
+## Track B — C cho hệ thống (11/2026–12/2026)
+Rotation: Integer/bitwise → Error handling → Concurrency → GDB.
 
 | Topic | Nội dung |
 | --- | --- |
-| [RAII & ownership](cpp-raii-ownership/README.md) | ctor/dtor, rule of 0/3/5, move, unique_ptr/shared_ptr |
-| [Classes & polymorphism](cpp-oop-polymorphism/README.md) | Object layout, vtable, virtual destructor, so sánh với C ops table |
-| [Templates & STL](cpp-templates-stl/README.md) | Template, constexpr, std::array/vector, iterator invalidation, code size |
-| [C/C++ interop](cpp-c-interop/README.md) | extern "C", name mangling, -fno-exceptions/-fno-rtti |
+| [Integer & bitwise](integer-bitwise/README.md) | Promotion, signed/unsigned, mask/shift, fixed-point Q15 |
+| [Error handling](error-handling/README.md) | errno, goto cleanup, EINTR/EAGAIN, chèn lỗi bằng LD_PRELOAD |
+| [Concurrency](concurrency/README.md) | Mutex/condvar, C11 atomics, SPSC lock-free trên Arm, priority inversion |
+| [GDB & debugging tools](gdb-debugging/README.md) | Watchpoint, core dump, gdbserver, GDB Python |
 
-Track B/C dùng lại code của track trước (counter của static-extern, copy_file của error-handling); giữ link giữa các REPORT.
-Bài có timebox tách riêng: [livecoding](../livecoding/README.md) (embedded C) và [LeetCode](../leetcode/README.md) (thuật toán).
+## Track C — C++ cho embedded (01/2027)
+| Topic | Nội dung |
+| --- | --- |
+| [Modern C++ cho embedded](cpp-modern-embedded/README.md) | RAII, move, constexpr, container không heap, CRTP, code size, -fno-exceptions |
+| [C/C++ interop](cpp-c-interop/README.md) | extern "C", ABI, opaque handle, exception ở biên C |
+
+Đã gộp để bớt trùng lặp: static/extern và preprocessor/build vào Build & link; classes/polymorphism vào Function pointer (so sánh vtable với ops table); templates/STL vào Modern C++.
+Bài có timebox tách riêng: [livecoding](../livecoding/README.md) (embedded C) và [LeetCode](../leetcode/README.md) (thuật toán). Nền kiến trúc CPU ở [arm-architecture](../arm-architecture/README.md).
 
 Mỗi topic có README hướng dẫn và REPORT.md để ghi actual output. Source/tests/evidence do người học tạo trong quá trình làm bài.
-Level và evidence của từng topic (CC01–CC17) theo dõi ở [TRACKING.md](../TRACKING.md#cc).
+Level và evidence của từng topic theo dõi ở [TRACKING.md](../TRACKING.md#cc).

@@ -1,7 +1,7 @@
 # SPI
 Status: Not started
 ## Learning goals
-Mode CPOL/CPHA, chip select, clock speed, full-duplex, spidev, device tree/pinmux
+Mode CPOL/CPHA, chip select, clock speed, full-duplex, spidev, DMA cho transfer lớn, device tree/pinmux
 
 ## Recall — 10 phút
 Không dùng AI: SPI mode 0–3 khác nhau ở đâu? Vì sao SPI không có ACK như I2C? Ai quyết định tốc độ clock tối đa?
@@ -15,6 +15,16 @@ Có/không nối loopback; speed thấp/cao; sai SPI mode với LSM6DSOX; spidev
 ## Required artifacts
 src/spi_loopback.c, src/lsm6dsox_spi.c; output; ảnh logic analyzer I2C vs SPI; cấu hình device tree/pinmux đã dùng.
 Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence phải trỏ đến file thật khi hoàn thành.
+
+## Deep dive (pro)
+Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
+1. Đo throughput spidev với transfer nhỏ và lớn; giải thích overhead mỗi transfer và khi nào driver dùng DMA.
+2. Cố ý sai SPI mode và tốc độ, nhận diện lỗi từ waveform.
+3. Đọc FIFO của LSM6DSOX theo burst qua SPI; so sánh với đọc từng mẫu.
+
+## Làm tay vs dùng AI
+- Làm tay để hiểu: Timing và mode của bus — đọc từ waveform thật.
+- Dùng AI rồi kiểm chứng: Code spidev mẫu; kiểm bằng logic analyzer.
 
 ## Safety & setup
 - Tắt nguồn khi đấu/tháo dây; đối chiếu pin map của đúng board revision trước khi cấp điện.
@@ -36,3 +46,4 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 - [ ] Có expected vs actual cho case liên quan.
 - [ ] Có evidence thật (log/số đo/ảnh) và phân tích giới hạn.
 - [ ] Tự giải thích topic bằng tiếng Việt và 5 câu tiếng Anh.
+- [ ] L3: làm lại sau ≥ 7 ngày không ghi chú, không AI, và hoàn thành ít nhất một bài Deep dive.

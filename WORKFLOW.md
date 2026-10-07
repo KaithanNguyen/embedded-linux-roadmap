@@ -16,9 +16,9 @@ Buổi tối T2–T6 từ 18:30, mỗi tối một chủ đề chính. Mỗi kh�
 | Buổi | Trọng tâm | Output tối thiểu | Ví dụ |
 | --- | --- | --- | --- |
 | T2 | C/C++ ([foundation](c-cpp-foundation/README.md), [LeetCode](leetcode/README.md)) | 1 bài tập có unit test | Ring buffer cho mẫu dữ liệu IMU kèm 5 test |
-| T3 | Embedded Linux — lý thuyết | 1 concept note hoặc 1 trang ghi chú | Luồng boot ROM → TF-A → U-Boot → kernel |
+| T3 | Embedded Linux — lý thuyết ([linux-system](linux-system/README.md), [linux-kernel](linux-kernel/README.md)) | 1 concept note hoặc 1 trang ghi chú | Luồng boot ROM → TF-A → U-Boot → kernel |
 | T4 | Ngoại ngữ | 1 bản ghi âm 2–3 phút giải thích một chủ đề kỹ thuật bằng tiếng Anh | Giải thích luồng boot của MP257F |
-| T5 | MCU và hệ thống ([hardware](hardware/README.md)) | 1 sơ đồ hoặc 1 trang ghi chú | Đường đi của một mẫu dữ liệu từ cảm biến đến user space |
+| T5 | MCU và hệ thống ([hardware](hardware/README.md), [arm-architecture](arm-architecture/README.md)) | 1 sơ đồ, 1 số đo hoặc 1 trang ghi chú | Đường đi của một mẫu dữ liệu từ cảm biến đến user space |
 | T6 | Embedded Linux — lab nhỏ | 1 commit hoặc 1 kết quả chạy được, kèm 3 dòng ghi chú | Tháng 10: mini shell; tháng 12: đọc WHO_AM_I của LSM6DSOX |
 | T7 | Embedded Linux — lab chính; 13:00–14:00 việc nhẹ: ôn log tuần, đọc datasheet/reference manual | 1 kết quả chạy được có evidence | Boot kernel thủ công từ U-Boot |
 | CN | Chốt output tuần, viết README; review tuần 30 phút | Sprint README + bảng tuần + TRACKING cập nhật | Chọn ba việc quan trọng nhất tuần tới |
@@ -33,8 +33,8 @@ Hai quy tắc: buổi không có output là buổi chưa xong; ngày bị kẹt 
 | Khi nào | Việc |
 | --- | --- |
 | Sau mỗi lab | Điền REPORT.md có kết quả Pass/Fail và link evidence → nâng topic lên L2 trong TRACKING.md |
-| Chủ nhật | Làm lại 1–2 topic đã ở L2 được ≥ 7 ngày, không ghi chú, không AI, trong timebox → L3 kèm ngày; chạy `python tools/repo_check.py check` và `python tools/repo_check.py progress --write` |
-| Cuối tháng | Spot check: làm lại 2 topic L3 chọn ngẫu nhiên; không đạt thì hạ về L2 và ghi lý do |
+| Chủ nhật | Làm lại 1–2 topic đã ở L2 được ≥ 7 ngày, không ghi chú, không AI, trong timebox, kèm một bài Deep dive → L3 kèm ngày; chạy `python tools/repo_check.py check` và `python tools/repo_check.py progress --write` |
+| Cuối tháng | Spot check: làm lại 2 topic L3 chọn ngẫu nhiên; không đạt thì hạ về L2 và ghi lý do; làm một [debug drill](debug-drills/README.md) |
 | Cuối quý | Audit toàn bộ TRACKING.md: topic trễ hạn, topic cần verify lại, level so với mục tiêu cổng |
 
 ## Quy tắc evidence
@@ -50,4 +50,5 @@ Hai quy tắc: buổi không có output là buổi chưa xong; ngày bị kẹt 
 - Bị kẹt: tự thử 30 phút và ghi lại đã thử gì. Sau đó mới hỏi, kèm triệu chứng, những gì đã thử và giả thuyết hiện tại.
 - Output của AI là bản nháp: viết spec + acceptance criteria trước; đối chiếu từng register/bit với datasheet; kiểm tra timing, ownership bộ nhớ, error path; chạy test trên phần cứng thật.
 - Lỗi AI đã mắc ghi vào [AI error log](docs/ai-error-log.md).
+- Chỗ nào đầu tư sâu, chỗ nào giao cho AI, và checklist review code AI: [AI-assisted engineering](docs/ai-assisted-engineering.md).
 - Bài verify L3 làm hoàn toàn không AI.

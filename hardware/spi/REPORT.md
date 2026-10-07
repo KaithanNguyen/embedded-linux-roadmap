@@ -35,6 +35,13 @@ Cleanup chỉ áp dụng với tài nguyên của lab:
 | Boundary | TODO | TODO | Chưa chạy | Not run | — |
 | Error | TODO | TODO | Chưa chạy | Not run | — |
 
+## Deep dive
+| Bài | Kết quả | Evidence |
+| --- | --- | --- |
+| 1 | Not run | — |
+| 2 | Not run | — |
+| 3 | Not run | — |
+
 ## Analysis
 Giải thích chênh lệch dự đoán/kết quả; giới hạn của phép thử.
 ## Lessons

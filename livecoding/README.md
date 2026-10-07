@@ -42,29 +42,25 @@ Folder `attempts/YYYY-MM-DD_LCxx/`: `session.md` (copy từ template), source, t
 
 ## Problem bank
 Đề chi tiết (signature, câu hỏi làm rõ, test bắt buộc, câu hỏi mở rộng) ở [problems.md](problems.md).
+Đã bỏ 5 bài trùng với LeetCode (đếm bit, linked list, atoi, LRU cache) hoặc với lab Modern C++ (String rule of 5).
 
 | ID | Bài | Focus | Level | Attempts | Best | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | LC01 | Bit operations & register field | Bitwise, mask/shift | Easy | 0 | — | Not started |
-| LC02 | Popcount, power of 2, reverse bits | Bitwise | Easy | 0 | — | Not started |
-| LC03 | Endianness & serialization | Byte order, alignment | Easy | 0 | — | Not started |
-| LC04 | memmove | Pointer, overlap | Easy | 0 | — | Not started |
-| LC05 | Parse integer an toàn | String, overflow | Medium | 0 | — | Not started |
-| LC06 | Ring buffer FIFO | Data structure, no heap | Medium | 0 | — | Not started |
-| LC07 | Singly linked list | Pointer | Medium | 0 | — | Not started |
-| LC08 | Intrusive list + container_of | Kernel idiom | Medium | 0 | — | Not started |
-| LC09 | Frame parser state machine | Protocol, state machine | Medium | 0 | — | Not started |
-| LC10 | CRC-8 | Checksum, bitwise | Medium | 0 | — | Not started |
-| LC11 | Fixed-block memory pool | Memory, alignment | Medium | 0 | — | Not started |
-| LC12 | Button debounce | Time, state machine | Medium | 0 | — | Not started |
-| LC13 | Moving average fixed-point | Integer math, overflow | Medium | 0 | — | Not started |
-| LC14 | Thread-safe bounded queue | pthread, condvar | Hard | 0 | — | Not started |
-| LC15 | SPSC lock-free ring buffer | C11 atomics | Hard | 0 | — | Not started |
-| LC16 | Software timers | Callback, time wrap | Hard | 0 | — | Not started |
-| LC17 | C++ UniquePtr | RAII, move | Medium | 0 | — | Not started |
-| LC18 | C++ String rule of 5 | Copy/move | Medium | 0 | — | Not started |
-| LC19 | C++ LRU cache | STL, complexity | Medium | 0 | — | Not started |
-| LC20 | Linux `tail -n` bằng syscall | read/lseek, error handling | Medium | 0 | — | Not started |
+| LC02 | Endianness & serialization | Byte order, alignment | Easy | 0 | — | Not started |
+| LC03 | memmove | Pointer, overlap | Easy | 0 | — | Not started |
+| LC04 | Ring buffer FIFO | Data structure, no heap | Medium | 0 | — | Not started |
+| LC05 | Intrusive list + container_of | Kernel idiom | Medium | 0 | — | Not started |
+| LC06 | Frame parser state machine | Protocol, state machine | Medium | 0 | — | Not started |
+| LC07 | CRC-8 | Checksum, bitwise | Medium | 0 | — | Not started |
+| LC08 | Fixed-block memory pool | Memory, alignment | Medium | 0 | — | Not started |
+| LC09 | Button debounce | Time, state machine | Medium | 0 | — | Not started |
+| LC10 | Moving average fixed-point | Integer math, overflow | Medium | 0 | — | Not started |
+| LC11 | Thread-safe bounded queue | pthread, condvar | Hard | 0 | — | Not started |
+| LC12 | SPSC lock-free ring buffer | C11 atomics | Hard | 0 | — | Not started |
+| LC13 | Software timers | Callback, time wrap | Hard | 0 | — | Not started |
+| LC14 | C++ UniquePtr | RAII, move | Medium | 0 | — | Not started |
+| LC15 | Linux `tail -n` bằng syscall | read/lseek, error handling | Medium | 0 | — | Not started |
 
 ## Attempt log
 | Ngày | Problem / mini project | Thời gian | Điểm | Có gợi ý? | Session |

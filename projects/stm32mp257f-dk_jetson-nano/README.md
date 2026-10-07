@@ -221,12 +221,12 @@ State machine của link và detector: [docs/software-design.md](docs/software-d
 ### Components
 | Component | Board | Ngôn ngữ | Trách nhiệm | Topic liên quan |
 | --- | --- | --- | --- | --- |
-| imu-fw | MP257F (M33) | C, STM32CubeMP2 | Lấy mẫu LSM6DSOX theo INT1, phát hiện sự kiện, điều khiển LED/buzzer, RPMsg | MC01–MC04 |
+| imu-fw | MP257F (M33) | C, STM32CubeMP2 | Lấy mẫu LSM6DSOX theo INT1, phát hiện sự kiện, điều khiển LED/buzzer, RPMsg | MC01–MC04, AR04, AR06 |
 | IIO path | MP257F (A35) | C (kernel) | Trước 06/2027: driver IIO tự viết cung cấp mẫu qua IIO buffer | KN03, KN06, KN08, KN09 |
-| sensor-svc | MP257F (A35) | C | Nhận mẫu (IIO hoặc RPMsg), detector (trước 06/2027), outbox, codec, TCP/TLS, heartbeat, watchdog | CC11, CC12, LS08, NW01, NW05, RL01 |
+| sensor-svc | MP257F (A35) | C | Nhận mẫu (IIO hoặc RPMsg), detector (trước 06/2027), outbox, codec, TCP/TLS, heartbeat, watchdog | CC11, CC12, LS08, LS10, NW01, NW05, RL01, HW08 |
 | protocol | Cả hai | C | Encode/decode frame, version, CRC-32; unit test + fuzz trên host | CC05, CC09, TS01, TS06 |
 | event-rx | Jetson | C++ hoặc Go (ADR) | Nhận + validate, ACK, chống trùng, trigger recorder, forward về host | NW01, NW06, NW08 |
-| recorder | Jetson | C++ + GStreamer | Ring segment, ghi clip, metadata, SHA-256, retention | VD01–VD05, VD07, RL02 |
+| recorder | Jetson | C++ + GStreamer | Ring segment, ghi clip, metadata, SHA-256, retention | VD01–VD05, VD07, RL02, LS09 |
 | detector | Jetson | C++/Python, jetson-inference | Nhận dạng trên GPU, gửi DETECTION/LED_CMD | PW03 |
 | time sync | Cả hai | chrony | Jetson là NTP server của LAN, MP257F là client; đo lệch bằng sync GPIO | VD07, R08 |
 | systemd units | Cả hai | — | Khởi động, restart, watchdog, sandboxing, logging qua journald | RL01, SC07 |

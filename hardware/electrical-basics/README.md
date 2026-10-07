@@ -16,6 +16,16 @@ Từ user manual/schematic, lập pin map 40-pin header của cả hai board (s�
 Pin map cho mỗi board (kèm tên + version tài liệu); bảng số đo; ảnh setup đo.
 Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence phải trỏ đến file thật khi hoàn thành.
 
+## Deep dive (pro)
+Làm ít nhất một bài để đạt L3; làm đủ ba bài trước khi coi topic là thế mạnh.
+1. Tính thời gian lên của đường I2C từ điện trở pull-up và điện dung bus; suy ra tốc độ tối đa và chọn pull-up.
+2. Lần theo cây nguồn trên schematic DK: PMIC → rail → 3V3 của header; ghi dòng tối đa được phép lấy.
+3. Đo dòng tiêu thụ của LSM6DSOX ở power-down, low-power, high-performance và so với datasheet.
+
+## Làm tay vs dùng AI
+- Làm tay để hiểu: Đọc schematic, tính dòng/áp — sai ở đây làm hỏng phần cứng.
+- Dùng AI rồi kiểm chứng: Tra nhanh thông số linh kiện; luôn mở datasheet gốc để xác nhận.
+
 ## Safety & setup
 - Tắt nguồn khi đấu/tháo dây; đối chiếu pin map của đúng board revision trước khi cấp điện.
 - GPIO header dùng logic 3.3V: không đưa tín hiệu 5V vào GPIO; nối GND chung trước khi nối tín hiệu.
@@ -37,3 +47,4 @@ Ghi kết quả tại [REPORT.md](REPORT.md); đường dẫn code/evidence ph�
 - [ ] Có expected vs actual cho case liên quan.
 - [ ] Có evidence thật (log/số đo/ảnh) và phân tích giới hạn.
 - [ ] Tự giải thích topic bằng tiếng Việt và 5 câu tiếng Anh.
+- [ ] L3: làm lại sau ≥ 7 ngày không ghi chú, không AI, và hoàn thành ít nhất một bài Deep dive.

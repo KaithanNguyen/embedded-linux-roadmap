@@ -11,6 +11,7 @@ Kế hoạch theo từng mức:
 ## Thứ tự học và vai trò thiết bị
 Laptop (Linux, C, gdb, cross compile) → STM32MP257F-DK (boot, U-Boot, device tree, kernel, driver, Yocto) → LSM6DSOX (peripheral thực chiến đầu tiên) → Jetson Nano từ 04/2027 (userspace nâng cao, networking, camera/AI).
 Networking đi cùng Jetson Nano ở Q2/2027, nên Cổng 1 tập trung vào BSP và driver.
+Thời gian dồn vào phần AI không làm thay được — bring-up, kernel, timing, debug trên board, kiểm chứng code AI với datasheet; phần AI làm tốt (boilerplate, tra lệnh, số lượng lớn bài thuật toán) đã được cắt ([lý do](docs/ai-assisted-engineering.md)).
 
 | Thiết bị | Vai trò | Bắt đầu dùng | Output tiêu biểu |
 | --- | --- | --- | --- |
@@ -42,10 +43,10 @@ Chi tiết thiết bị và an toàn: [hardware](hardware/README.md). Project t�
 | Tháng | Phần cứng chính | Output mục tiêu | Output thực tế | Trạng thái |
 | --- | --- | --- | --- | --- |
 | 10/2026 | Laptop | Repo học có log hằng ngày; mini shell; chương trình đa luồng; IPC; binary aarch64 chạy trên QEMU | | Đang làm |
-| 11/2026 | MP257F-DK | Log boot có chú thích; app cross compile + gdbserver; boot thủ công từ U-Boot; kernel + DTB tự build | | Chưa bắt đầu |
-| 12/2026 | MP257F-DK, LSM6DSOX | Cảm biến chạy qua I2C và SPI; dữ liệu qua IIO với ngắt data-ready; bài viết tổng kết quý | | Chưa bắt đầu |
-| 01/2027 | MP257F-DK, LSM6DSOX | Kernel module đầu tiên; I2C client driver tự viết dùng regmap, đọc WHO_AM_I và xuất dữ liệu qua sysfs; debug kernel bằng printk, dynamic debug, ftrace | | Chưa bắt đầu |
-| 02/2027 | MP257F-DK, LSM6DSOX | Driver IIO tự viết: probe từ device tree, ngắt data-ready, IIO buffer + trigger; README so sánh với `st_lsm6dsx` upstream | | Chưa bắt đầu |
+| 11/2026 | MP257F-DK | Log boot có chú thích; app cross compile + gdbserver; boot thủ công từ U-Boot; kernel + DTB tự build; Arm: exception level và PSCI | | Chưa bắt đầu |
+| 12/2026 | MP257F-DK, LSM6DSOX | Cảm biến chạy qua I2C và SPI; bảng register đối chiếu datasheet; bias/noise của cảm biến; dữ liệu qua IIO với ngắt data-ready; Arm: cache, memory ordering, GIC; bài viết tổng kết quý | | Chưa bắt đầu |
+| 01/2027 | MP257F-DK, LSM6DSOX | Kernel module đầu tiên; I2C client driver tự viết dùng regmap, đọc WHO_AM_I và xuất dữ liệu qua sysfs; debug kernel bằng printk, dynamic debug, ftrace; ghi file bền vững qua cắt nguồn | | Chưa bắt đầu |
+| 02/2027 | MP257F-DK, LSM6DSOX | Driver IIO tự viết: probe từ device tree, ngắt data-ready, IIO buffer + trigger; README so sánh với `st_lsm6dsx` upstream; DMA API; histogram cyclictest | | Chưa bắt đầu |
 | 03/2027 | MP257F-DK | Yocto: layer riêng, recipe cho app, driver và bản vá device tree; image riêng boot trên board (Cổng 1) | | Chưa bắt đầu |
 | 04/2027 | Jetson Nano, MP257F-DK | Jetson Nano chạy; MP257F gửi dữ liệu LSM6DSOX qua TCP và UDP sang Jetson; đo độ trễ và mất gói bằng Wireshark; thêm TLS | | Chưa bắt đầu |
 | 05/2027 | Jetson Nano | Pipeline GStreamer/OpenCV; video + dữ liệu chuyển động đồng bộ timestamp; sự kiện rung/rơi từ LSM6DSOX kích hoạt ghi hình | | Chưa bắt đầu |
@@ -58,8 +59,8 @@ Chi tiết thiết bị và an toàn: [hardware](hardware/README.md). Project t�
 | Chu kỳ | Output tối thiểu | Nơi ghi |
 | --- | --- | --- |
 | Ngày | Mỗi buổi có một output (xem [nhịp học](WORKFLOW.md#nhịp-học-hằng-tuần)); ngày bị kẹt thì output là "đã thử gì, giả thuyết gì" | [log tháng](LEARNING_LOG.md) |
-| Tuần | 2 commit có ý nghĩa; 1 bản ghi debug journal; 2–3 bài LeetCode; 1 bài viết hoặc bản ghi âm tiếng Anh tổng hợp tuần; verify lại 1–2 topic; review Chủ nhật 30 phút | [sprints](sprints/README.md), [TRACKING](TRACKING.md), [weekly review](templates/weekly-review.md) |
-| Tháng | Đọc lại debug journal, rút ra một khuôn mẫu lỗi; 1 milestone project + 1 ADR; 1 mini project 90 phút cùng AI + cập nhật AI error log; 1 bài viết kỹ thuật tiếng Anh; spot check 2 topic L3 | Bảng tháng ở trên, [monthly review](templates/monthly-review.md) |
+| Tuần | 2 commit có ý nghĩa; 1 bản ghi debug journal; 1–2 bài LeetCode hoặc 1 bài live coding; 1 bản ghi âm tiếng Anh tổng hợp tuần; verify lại 1–2 topic kèm một bài Deep dive; review Chủ nhật 30 phút | [sprints](sprints/README.md), [TRACKING](TRACKING.md), [weekly review](templates/weekly-review.md) |
+| Tháng | Đọc lại debug journal, rút ra một khuôn mẫu lỗi; 1 debug drill; 1 milestone project + 1 ADR; 1 mini project 90 phút cùng AI + cập nhật AI error log; 1 bài viết kỹ thuật tiếng Anh; spot check 2 topic L3 | Bảng tháng ở trên, [monthly review](templates/monthly-review.md) |
 | Quý | Đối chiếu bảng quý; audit TRACKING; demo từ clean checkout; điều chỉnh quý tiếp theo | Bảng quý ở trên, [quarterly review](templates/quarterly-review.md) |
 
 Cập nhật cột "Output thực tế" và "Trạng thái" trong buổi review Chủ nhật, kèm link commit hoặc bài viết.
@@ -72,9 +73,10 @@ Số hiện tại được sinh tự động ở phần [Progress của README](
 | --- | --- | --- |
 | Topic đạt ≥ L2 / ≥ L3 | Theo [mục tiêu cổng](TRACKING.md#mục-tiêu-level-theo-cổng) | [TRACKING](TRACKING.md) |
 | Bản ghi debug journal | 30 | [debug-logs](debug-logs/README.md) |
-| Bài LeetCode | 100 | [leetcode](leetcode/README.md) |
+| Debug drill | 12 | [debug-drills](debug-drills/README.md) |
+| Bài LeetCode | 60, trong đó ≥ 30 Verified | [leetcode](leetcode/README.md) |
 | ADR | 10 | [docs/adr](docs/adr/README.md) |
-| Bài viết tiếng Anh | 20 | [docs/writeups](docs/writeups/README.md) |
+| Bài viết tiếng Anh | 12 | [docs/writeups](docs/writeups/README.md) |
 | Patch gửi upstream (đến 09/2027) | 1–2 | [TRACKING KN12](TRACKING.md#boot-bsp--kernel) |
 
 ## Chuẩn bị trước

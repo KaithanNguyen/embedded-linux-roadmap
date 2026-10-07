@@ -3,6 +3,7 @@ Mỗi bug khó trở thành một bản ghi root cause. Mục tiêu: 1 bản ghi
 Dùng [debug template](../templates/debug-report.md) cho vấn đề xuyên sprint.
 Report thuộc sprint/project giữ tại chỗ; index tại đây liên kết về bản gốc.
 Chỉ ghi lỗi từ lab và project cá nhân; lỗi gặp ở công việc giữ ngoài repo công khai.
+Bài luyện với lỗi cài sẵn: [debug drills](../debug-drills/README.md); bản ghi của mỗi drill cũng nằm trong journal này.
 
 | Issue | Report | Root cause | Status |
 | --- | --- | --- | --- |

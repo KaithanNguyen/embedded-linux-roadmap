@@ -2,6 +2,7 @@
 Ma trận năng lực của toàn bộ repo. Mỗi topic có một kết quả kiểm chứng được ("Verify — làm được"), nơi làm, thời điểm dự kiến, level hiện tại và evidence.
 File này là nguồn duy nhất cho level của topic: REPORT.md giữ chi tiết kết quả, TRACKING.md giữ level và link evidence.
 Mọi claim ở đây được kiểm tra bằng `python tools/repo_check.py check` (xem [kiểm tra tự động](#kiểm-tra-tự-động)).
+Cách chọn chỗ đầu tư sâu và chỗ giao cho AI: [AI-assisted engineering](docs/ai-assisted-engineering.md).
 
 ## Mức verify
 | Level | Ý nghĩa | Điều kiện | Evidence bắt buộc |
@@ -9,7 +10,7 @@ Mọi claim ở đây được kiểm tra bằng `python tools/repo_check.py che
 | L0 | Chưa bắt đầu | — | — |
 | L1 | Hiểu | Trả lời được [câu hỏi tự kiểm tra](docs/self-check.md) và câu recall của topic mà không xem ghi chú, không dùng AI | Không bắt buộc |
 | L2 | Làm được | Lab hoặc bài có source, lệnh tái hiện, expected vs actual; test normal/boundary/error phù hợp | Link tới REPORT.md có ít nhất một kết quả Pass/Fail, hoặc file evidence trong repo |
-| L3 | Kiểm chứng | Làm lại từ đầu sau ≥ 7 ngày, không xem ghi chú, không AI, trong timebox; test pass; giải thích 5 phút bằng tiếng Anh | Như L2, kèm ngày verify |
+| L3 | Kiểm chứng | Làm lại từ đầu sau ≥ 7 ngày, không xem ghi chú, không AI, trong timebox; test pass; giải thích 5 phút bằng tiếng Anh; hoàn thành ít nhất một bài Deep dive của topic | Như L2, kèm ngày verify |
 | L4 | Vận dụng | Dùng trên phần cứng thật trong project, trong một ca debug thật, hoặc viết thành bài | Link vào projects/, debug-logs/, docs/ hoặc sprints/ |
 
 Topic ở L3/L4 được verify lại sau 90 ngày. Làm lại không đạt thì hạ về L2 và ghi lý do vào weekly review.
@@ -18,10 +19,13 @@ Topic ở L3/L4 được verify lại sau 90 ngày. Làm lại không đạt th�
 | Loại | Cách verify |
 | --- | --- |
 | Code (C/C++, LeetCode, live coding) | Unit test + sanitizer pass; làm lại từ đầu trong timebox; giải thích độ phức tạp và edge case |
-| Linux, kernel, BSP | Tái hiện trên board từ lệnh đã ghi; boot log hoặc dmesg chú thích được từng dòng quan trọng |
+| Kiến trúc Arm | Số đo trên lõi thật (benchmark, litmus test), disassembly có chú thích, trích tài liệu kèm phiên bản |
+| Linux, kernel, BSP | Tái hiện trên board từ lệnh đã ghi; boot log hoặc dmesg chú thích được từng dòng quan trọng; checkpatch sạch |
 | Phần cứng | Sơ đồ đấu dây, số đo đồng hồ, ảnh logic analyzer; nối lại từ pin map mà không xem ghi chú |
 | Mạng, video | Số đo tái hiện được bằng script (latency p50/p99, mất gói, bitrate) kèm capture |
 | Độ bền, bảo mật | Fault injection có đếm (kill, rút nguồn, image hỏng, sai chữ ký); threat model được review lại |
+| Debug drill | Bản ghi root cause trong debug journal, có thời gian tìm ra lỗi và regression test |
+| Làm việc với AI | Spec viết trước; AI error log; checklist review đã áp dụng cho từng PR |
 | Thiết kế | Bản nháp 45 phút + design doc; tự review theo checklist trong [design studies](docs/design-studies/README.md) |
 | Giao tiếp | Bài viết trong repo; bản ghi âm không commit, chỉ ghi lỗi và từ bị bí |
 
@@ -29,15 +33,15 @@ Topic ở L3/L4 được verify lại sau 90 ngày. Làm lại không đạt th�
 | Chu kỳ | Việc |
 | --- | --- |
 | Sau mỗi lab | Điền REPORT.md; nâng level lên L2 kèm link evidence |
-| Hằng tuần (Chủ nhật) | Làm lại 1–2 topic đã ở L2 được ≥ 7 ngày để lên L3; chạy `python tools/repo_check.py check` và `progress --write` |
-| Hằng tháng | Spot check: làm lại 2 topic L3 chọn ngẫu nhiên; xử lý các topic trễ hạn |
+| Hằng tuần (Chủ nhật) | Làm lại 1–2 topic đã ở L2 được ≥ 7 ngày, kèm một bài Deep dive, để lên L3; chạy `python tools/repo_check.py check` và `progress --write` |
+| Hằng tháng | Spot check: làm lại 2 topic L3 chọn ngẫu nhiên; một debug drill; xử lý các topic trễ hạn |
 | Hằng quý | Audit toàn bộ ma trận: topic trễ hạn, topic cần verify lại, level so với mục tiêu cổng |
 
 ## Mục tiêu level theo cổng
 | Mốc | Mục tiêu |
 | --- | --- |
-| Cổng 1 — 03/2027 | Mọi topic có hạn đến 03/2027 đạt ≥ L2; CC01–CC13, KN05, KN08, KN09 đạt L3 |
-| Cổng 2 — 06/2027 | Mọi topic có hạn đến 06/2027 đạt ≥ L2; topic dùng trong project (NW01, NW05, VD04, RL01–RL03, MC04) đạt L4 |
+| Cổng 1 — 03/2027 | Mọi topic có hạn đến 03/2027 đạt ≥ L2; toàn bộ C/C++ track A + B, AR03, KN05, KN08, KN09 đạt L3; ít nhất 6 debug drill |
+| Cổng 2 — 06/2027 | Mọi topic có hạn đến 06/2027 đạt ≥ L2; topic dùng trong project (NW01, NW05, VD04, RL01–RL03, MC04) đạt L4; 12 debug drill |
 | 09/2027 | Mọi topic không tùy chọn đạt ≥ L2; ít nhất một nửa đạt L3 |
 
 ## Kiểm tra tự động
@@ -49,69 +53,79 @@ Topic ở L3/L4 được verify lại sau 90 ngày. Làm lại không đạt th�
 - log ngày sai định dạng;
 - nội dung khớp danh sách từ riêng tư cục bộ, nếu đã cấu hình (xem [tools](tools/README.md)).
 
-**Cảnh báo** (không chặn): topic trễ hạn, topic cần verify lại, bảng progress chưa cập nhật.
+**Cảnh báo** (không chặn): topic trễ hạn, topic cần verify lại, bảng progress chưa cập nhật, folder lab chưa có dòng trong ma trận.
 
 ## Ma trận năng lực
 Cột Verified ghi ngày làm lại đạt L3 (YYYY-MM-DD). "Tùy chọn" = không tính vào mục tiêu cổng.
+ID không bao giờ tái sử dụng. ID đã gộp hoặc bỏ: CC03 và CC10 → CC07; CC15 → CC06; CC16 → CC14; LS03 → CC12; AL03 → AI04.
 
 ### C/C++
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| CC01 | Pointer | Hàm thao tác mảng qua pointer + length đúng contract; giải thích array decay, const, lifetime | [lab](c-cpp-foundation/pointer/README.md) | 10/2026 | L0 | — | — |
-| CC02 | Memory | Buffer cấp phát động có một owner rõ ràng, xử lý allocation failure; ASan sạch | [lab](c-cpp-foundation/memory/README.md) | 10/2026 | L0 | — | — |
-| CC03 | static / extern | Giải thích scope, linkage, storage duration; tái hiện và sửa lỗi thiếu/trùng definition | [lab](c-cpp-foundation/static-extern/README.md) | 10/2026 | L0 | — | — |
-| CC04 | volatile | Chỉ ra bằng assembly khi nào volatile đổi code sinh ra; giải thích vì sao không thay được atomic/mutex | [lab](c-cpp-foundation/volatile/README.md) | 11/2026 | L0 | — | — |
-| CC05 | struct / union | Encode/decode byte buffer không cast struct; giải thích padding, alignment, endianness | [lab](c-cpp-foundation/struct-union/README.md) | 11/2026 | L0 | — | — |
-| CC06 | Function pointer | Dispatcher callback + context pointer; định nghĩa hành vi khi callback null | [lab](c-cpp-foundation/function-pointer/README.md) | 11/2026 | L0 | — | — |
-| CC07 | Linker | Đọc nm/readelf/map; phân biệt lỗi compile với lỗi link và sửa được | [lab](c-cpp-foundation/linker/README.md) | 11/2026 | L0 | — | — |
-| CC08 | Undefined behavior | Tái hiện UB bằng sanitizer, sửa, có regression test; phân biệt UB, implementation-defined, unspecified | [lab](c-cpp-foundation/undefined-behavior/README.md) | 11/2026 | L0 | — | — |
-| CC09 | Integer & bitwise | API bit/field trên uint32_t; dự đoán đúng kết quả integer promotion | [lab](c-cpp-foundation/integer-bitwise/README.md) | 12/2026 | L0 | — | — |
-| CC10 | Preprocessor & build | Makefile có header dependency + CMakeLists tương đương; macro an toàn | [lab](c-cpp-foundation/preprocessor-build/README.md) | 12/2026 | L0 | — | — |
+| CC01 | Pointer | Hàm thao tác mảng qua pointer + length đúng contract; giải thích lifetime, aliasing, alignment | [lab](c-cpp-foundation/pointer/README.md) | 10/2026 | L0 | — | — |
+| CC02 | Memory | Buffer có một owner rõ ràng, xử lý allocation failure; pool allocator không malloc lúc chạy | [lab](c-cpp-foundation/memory/README.md) | 10/2026 | L0 | — | — |
+| CC04 | volatile | Chỉ ra bằng assembly khi nào volatile đổi code sinh ra; giải thích vì sao không thay được atomic, mutex hay barrier | [lab](c-cpp-foundation/volatile/README.md) | 10/2026 | L0 | — | — |
+| CC05 | struct / union | Encode/decode byte buffer không cast struct; khóa layout bằng static assert | [lab](c-cpp-foundation/struct-union/README.md) | 11/2026 | L0 | — | — |
+| CC06 | Function pointer | Dispatcher callback + context; ops table kiểu kernel; so sánh với virtual dispatch C++ | [lab](c-cpp-foundation/function-pointer/README.md) | 11/2026 | L0 | — | — |
+| CC07 | Build & link | Đọc nm/readelf/map file; linker script + startup code tối thiểu; sửa lỗi glibc version | [lab](c-cpp-foundation/build-link/README.md) | 11/2026 | L0 | — | — |
+| CC08 | Undefined behavior | Tái hiện UB và tối ưu dựa trên UB; sửa có regression test | [lab](c-cpp-foundation/undefined-behavior/README.md) | 11/2026 | L0 | — | — |
+| CC09 | Integer & bitwise | API bit/field trên uint32_t; dự đoán đúng integer promotion; fixed-point Q15 | [lab](c-cpp-foundation/integer-bitwise/README.md) | 11/2026 | L0 | — | — |
 | CC11 | Error handling | copy_file xử lý short write, EINTR, cleanup đúng ở mọi nhánh lỗi | [lab](c-cpp-foundation/error-handling/README.md) | 12/2026 | L0 | — | — |
-| CC12 | Concurrency | Counter đúng bằng mutex và atomic; bounded queue sạch dưới ThreadSanitizer | [lab](c-cpp-foundation/concurrency/README.md) | 12/2026 | L0 | — | — |
-| CC13 | GDB & debugging tools | Tìm lỗi bằng breakpoint/watchpoint; phân tích core dump offline; gdbserver trên board | [lab](c-cpp-foundation/gdb-debugging/README.md) | 01/2027 | L0 | — | — |
-| CC14 | C++ RAII & ownership | `UniqueFd` move-only; giải thích rule of 0/3/5 và khi nào dùng shared_ptr | [lab](c-cpp-foundation/cpp-raii-ownership/README.md) | 01/2027 | L0 | — | — |
-| CC15 | C++ classes & polymorphism | So sánh virtual dispatch với ops table của C bằng sizeof và assembly | [lab](c-cpp-foundation/cpp-oop-polymorphism/README.md) | 01/2027 | L0 | — | — |
-| CC16 | C++ templates & STL | `RingBuffer<T, N>` không dùng heap; đo code size khi instantiate nhiều kiểu | [lab](c-cpp-foundation/cpp-templates-stl/README.md) | 01/2027 | L0 | — | — |
-| CC17 | C/C++ interop | Gọi thư viện C từ C++ đúng `extern "C"`; đo ảnh hưởng của -fno-exceptions/-fno-rtti | [lab](c-cpp-foundation/cpp-c-interop/README.md) | 02/2027 | L0 | — | — |
+| CC12 | Concurrency | Bounded queue sạch dưới ThreadSanitizer; SPSC lock-free đúng trên Arm | [lab](c-cpp-foundation/concurrency/README.md) | 12/2026 | L0 | — | — |
+| CC13 | GDB & debugging tools | Watchpoint, phân tích core dump, gdbserver trên board | [lab](c-cpp-foundation/gdb-debugging/README.md) | 12/2026 | L0 | — | — |
+| CC14 | Modern C++ cho embedded | `UniqueFd` move-only; `RingBuffer<T, N>` không heap; đo code size | [lab](c-cpp-foundation/cpp-modern-embedded/README.md) | 01/2027 | L0 | — | — |
+| CC17 | C/C++ interop | Gọi thư viện C từ C++ đúng `extern "C"`; API C ổn định cho thư viện C++ | [lab](c-cpp-foundation/cpp-c-interop/README.md) | 01/2027 | L0 | — | — |
+
+### Arm architecture
+| ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| AR01 | Exception levels & boot | Bảng stage boot → EL → world; giải thích PSCI khi hotplug CPU | [lab](arm-architecture/exception-levels-boot/README.md) | 11/2026 | L0 | — | — |
+| AR02 | MMU, cache & memory hierarchy | Đồ thị latency theo working set trên A35 và A57; suy ra kích thước L1/L2 | [lab](arm-architecture/mmu-cache/README.md) | 12/2026 | L0 | — | — |
+| AR03 | Memory ordering & barriers | Litmus test quan sát reorder trên Arm; sửa bằng acquire/release và giải thích | [lab](arm-architecture/memory-ordering/README.md) | 12/2026 | L0 | — | — |
+| AR04 | Interrupt controllers: GIC & NVIC | Lần theo đường đi ngắt INT1 tới handler; đổi affinity và đo | [lab](arm-architecture/interrupts-gic-nvic/README.md) | 12/2026 | L0 | — | — |
+| AR05 | Assembly & ABI | Chú thích disassembly aarch64 và M33; unwind stack bằng tay | [lab](arm-architecture/assembly-abi/README.md) | 01/2027 | L0 | — | — |
+| AR06 | Cortex-M exceptions & faults | Fault handler giải mã CFSR và tìm ra dòng gây lỗi | [lab](arm-architecture/cortex-m-faults/README.md) | 06/2027 | L0 | — | — |
 
 ### Linux system programming
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| LS01 | Shell, filesystem, permission | Dùng thành thạo 50 lệnh trong cheat sheet; phân biệt disk, partition, filesystem, mount | [cheat sheet](docs/linux-cheatsheet.md) | 10/2026 | L0 | — | — |
-| LS02 | Process: fork, exec, wait, signal | Mini shell chạy lệnh và pipe, xử lý Ctrl-C, valgrind không rò bộ nhớ hay fd | [tuần 12–18/10](sprints/README.md#q42026) | 10/2026 | L0 | — | — |
-| LS03 | Thread & đồng bộ | Producer–consumer đúng dưới ThreadSanitizer; giải thích deadlock và priority inversion | [tuần 19–25/10](sprints/README.md#q42026) | 10/2026 | L0 | — | — |
-| LS04 | IPC | Hai process trao đổi qua pipe và shared memory có đồng bộ; biết khi nào dùng socket, message queue | [tuần 26/10–01/11](sprints/README.md#q42026) | 10/2026 | L0 | — | — |
-| LS05 | System call, file I/O, mmap | Giải thích đường đi của một system call; dùng strace chỉ ra syscall của chương trình; mmap một file | [sprints](sprints/README.md#q42026) | 10/2026 | L0 | — | — |
-| LS06 | Cross compile & QEMU | Binary aarch64 chạy trên QEMU; giải thích toolchain, sysroot, ABI bằng file/readelf | [tuần 26/10–01/11](sprints/README.md#q42026) | 10/2026 | L0 | — | — |
-| LS07 | Profiling & tracing | Tìm bottleneck bằng perf, có số đo trước/sau | [tuần 19–25/10](sprints/README.md#q42026) | 10/2026 | L0 | — | — |
-| LS08 | Event loop | Service đơn luồng xử lý socket + timer bằng epoll và timerfd | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 04/2027 | L0 | — | — |
+| LS01 | Shell, filesystem, permission | Hiểu mô hình file, process, permission; tra lệnh bằng man hoặc AI khi cần; cheat sheet chỉ ghi lệnh đã dùng thật | [cheat sheet](docs/linux-cheatsheet.md) | 10/2026 | L0 | — | — |
+| LS02 | Process & signals | Mini shell chạy lệnh và pipe, xử lý Ctrl-C, không rò fd | [lab](linux-system/process-signals/README.md) | 10/2026 | L0 | — | — |
+| LS04 | IPC | Số đo throughput/latency của pipe, Unix socket, shared memory; chọn cơ chế theo số đo | [lab](linux-system/ipc/README.md) | 10/2026 | L0 | — | — |
+| LS05 | Virtual memory & mmap | Giải thích page fault, page cache, RSS/PSS bằng số đo thật | [lab](linux-system/memory-mmap/README.md) | 11/2026 | L0 | — | — |
+| LS06 | Cross toolchain & sysroot | Binary aarch64 chạy trên QEMU và board; sửa được lỗi glibc/sysroot | [lab](linux-system/cross-toolchain/README.md) | 10/2026 | L0 | — | — |
+| LS07 | Observability & performance | Tìm bottleneck bằng perf + flame graph, có số đo trước/sau | [lab](linux-system/observability-perf/README.md) | 10/2026 | L0 | — | — |
+| LS08 | Event loop | Service epoll một luồng xử lý socket, timer, signal và tắt sạch | [lab](linux-system/event-loop/README.md) | 12/2026 | L0 | — | — |
+| LS09 | Storage & filesystems | Cách ghi đúng qua 20 lần cắt nguồn không hỏng file; giải thích fsync và rename | [lab](linux-system/storage-fs/README.md) | 01/2027 | L0 | — | — |
+| LS10 | Real-time & latency | Histogram cyclictest có và không tải; giải thích nguồn latency lớn nhất | [lab](linux-system/realtime-latency/README.md) | 02/2027 | L0 | — | — |
 
 ### Hardware & bench
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| HW01 | Electrical basics & datasheet | Pin map 40 chân của hai board kèm số đo; tính điện trở hạn dòng LED | [lab](hardware/electrical-basics/README.md) | 11/2026 | L0 | — | — |
-| HW02 | UART & serial console | Console qua ST-LINK và USB-UART; nhận ra lỗi sai baud hoặc đấu dây từ triệu chứng | [lab](hardware/uart/README.md) | 11/2026 | L0 | — | — |
-| HW03 | GPIO | Điều khiển LED, đọc nút bằng libgpiod; giải thích pull-up, active-low, pinmux | [lab](hardware/gpio/README.md) | 11/2026 | L0 | — | — |
-| HW04 | I2C | Đọc WHO_AM_I và dữ liệu LSM6DSOX qua /dev/i2c; giải mã gói bằng logic analyzer | [lab](hardware/i2c/README.md) | 12/2026 | L0 | — | — |
-| HW05 | SPI | Loopback + LSM6DSOX qua SPI; so sánh timing với I2C | [lab](hardware/spi/README.md) | 12/2026 | L0 | — | — |
-| HW06 | Đo đạc | Bảng dòng tiêu thụ cảm biến theo chế độ; đo độ trễ INT1 → GPIO user space bằng logic analyzer | [tuần 07–27/12](sprints/README.md#q42026) | 12/2026 | L0 | — | — |
+| HW01 | Electrical basics & datasheet | Pin map hai board kèm số đo; tính pull-up và điện trở hạn dòng | [lab](hardware/electrical-basics/README.md) | 11/2026 | L0 | — | — |
+| HW02 | UART & serial console | Console qua ST-LINK và USB-UART; chương trình termios raw mode | [lab](hardware/uart/README.md) | 11/2026 | L0 | — | — |
+| HW03 | GPIO | LED, nút, edge event bằng libgpiod; gpio-leds/gpio-keys qua device tree | [lab](hardware/gpio/README.md) | 11/2026 | L0 | — | — |
+| HW04 | I2C | Đọc LSM6DSOX qua /dev/i2c; giải mã gói và phục hồi bus bị treo | [lab](hardware/i2c/README.md) | 12/2026 | L0 | — | — |
+| HW05 | SPI | LSM6DSOX qua SPI; so sánh timing với I2C | [lab](hardware/spi/README.md) | 12/2026 | L0 | — | — |
+| HW06 | Đo đạc | Bảng dòng tiêu thụ theo chế độ; latency INT1 → GPIO user space bằng logic analyzer | [tuần 07–27/12](sprints/README.md#q42026) | 12/2026 | L0 | — | — |
+| HW07 | Register-level programming | Bảng register LSM6DSOX từ datasheet; đối chiếu bảng do AI sinh, ghi sai lệch | [lab](hardware/register-programming/README.md) | 12/2026 | L0 | — | — |
+| HW08 | Sensor data & signal basics | Bias, noise, calibration 6 mặt; bộ lọc fixed-point | [lab](hardware/sensor-signal/README.md) | 12/2026 | L0 | — | — |
 
 ### Boot, BSP & kernel
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| KN01 | Boot flow | Chú thích boot log thật từ ROM, TF-A, OP-TEE, U-Boot đến systemd; giải thích vai trò từng stage | [STM32MP257F-DK](hardware/boards/stm32mp257f-dk.md) | 11/2026 | L0 | — | — |
-| KN02 | U-Boot | Boot kernel thủ công, đổi bootargs; bảng thời gian boot từng stage | [STM32MP257F-DK](hardware/boards/stm32mp257f-dk.md) | 11/2026 | L0 | — | — |
-| KN03 | Device tree | Thêm/sửa node gpio-leds, gpio-keys, I2C client; giải thích compatible, reg, interrupts, pinctrl | [STM32MP257F-DK](hardware/boards/stm32mp257f-dk.md) | 11/2026 | L0 | — | — |
-| KN04 | Build kernel + DTB | Kernel + DTB tự build boot được; giải thích defconfig và cách bật một driver | [STM32MP257F-DK](hardware/boards/stm32mp257f-dk.md) | 11/2026 | L0 | — | — |
-| KN05 | Kernel module & character driver | Module load/unload sạch; file_operations, copy_to_user/copy_from_user, ioctl | [roadmap](ROADMAP.md#theo-tháng) | 01/2027 | L0 | — | — |
-| KN06 | Interrupt: top half, bottom half | Threaded IRQ cho INT1; giải thích khi nào dùng tasklet, workqueue, threaded IRQ | [roadmap](ROADMAP.md#theo-tháng) | 12/2026–01/2027 | L0 | — | — |
-| KN07 | Đồng bộ trong kernel | Chọn spinlock, mutex hay atomic theo context; giải thích vì sao không được sleep trong atomic context | [roadmap](ROADMAP.md#theo-tháng) | 01/2027 | L0 | — | — |
-| KN08 | I2C/SPI client driver + regmap | Driver probe từ device tree, đọc WHO_AM_I qua regmap, xuất dữ liệu qua sysfs | [roadmap](ROADMAP.md#theo-tháng) | 01/2027 | L0 | — | — |
-| KN09 | IIO subsystem | Driver IIO tự viết: channels, buffer, trigger, data-ready IRQ; so sánh với st_lsm6dsx | [roadmap](ROADMAP.md#theo-tháng) | 02/2027 | L0 | — | — |
-| KN10 | Kernel debugging | Dùng printk, dynamic debug, ftrace; giải mã một kernel oops về dòng source | [roadmap](ROADMAP.md#theo-tháng) | 01/2027 | L0 | — | — |
-| KN11 | Bộ nhớ: virtual memory, mmap, DMA | Giải thích page fault và OOM killer; mmap buffer từ driver sang user space; DMA coherent và streaming | [roadmap](ROADMAP.md#theo-tháng) | 02/2027 | L0 | — | — |
-| KN12 | Coding style & upstream | Patch sạch checkpatch.pl, gửi bằng git format-patch/send-email theo quy trình mailing list | [roadmap](ROADMAP.md#theo-tháng) | 09/2027 | L0 | — | — |
+| KN01 | Boot chain | Boot log chú thích từng stage, có thời gian từng stage | [lab](linux-kernel/boot-chain/README.md) | 11/2026 | L0 | — | — |
+| KN02 | U-Boot | Boot kernel thủ công; boot qua TFTP/NFS | [lab](linux-kernel/u-boot/README.md) | 11/2026 | L0 | — | — |
+| KN03 | Device tree | Node LSM6DSOX và gpio-leds/gpio-keys probe đúng; dtbs_check sạch | [lab](linux-kernel/device-tree/README.md) | 11/2026 | L0 | — | — |
+| KN04 | Kernel build & config | Kernel + DTB + module tự build boot được; config fragment tái hiện được | [lab](linux-kernel/kernel-build/README.md) | 11/2026 | L0 | — | — |
+| KN05 | Kernel module & character driver | Misc driver có read/write/poll/ioctl; checkpatch và KASAN sạch | [lab](linux-kernel/module-char-driver/README.md) | 01/2027 | L0 | — | — |
+| KN06 | Interrupts & deferred work | Threaded IRQ cho INT1, đếm mẫu mất, đo latency | [lab](linux-kernel/interrupts-deferred-work/README.md) | 12/2026–01/2027 | L0 | — | — |
+| KN07 | Kernel concurrency | Khóa đúng giữa IRQ thread và read(); lockdep sạch | [lab](linux-kernel/kernel-concurrency/README.md) | 01/2027 | L0 | — | — |
+| KN08 | Driver model, I2C/SPI & regmap | I2C client driver probe từ device tree qua regmap; unbind/bind sạch | [lab](linux-kernel/driver-model/README.md) | 01/2027 | L0 | — | — |
+| KN09 | IIO subsystem | Driver IIO tự viết có buffer + trigger data-ready | [lab](linux-kernel/iio-subsystem/README.md) | 02/2027 | L0 | — | — |
+| KN10 | Kernel debugging | Giải mã oops về dòng source; ftrace đường gọi | [lab](linux-kernel/kernel-debugging/README.md) | 01/2027 | L0 | — | — |
+| KN11 | Kernel memory & DMA | dmatest, buffer coherent/streaming, mmap buffer sang user space | [lab](linux-kernel/kernel-memory-dma/README.md) | 02/2027 | L0 | — | — |
+| KN12 | Upstream workflow | Patch sạch checkpatch, gửi bằng git send-email | [lab](linux-kernel/upstream-workflow/README.md) | 09/2027 | L0 | — | — |
 
 ### Yocto & build
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
@@ -120,12 +134,13 @@ Cột Verified ghi ngày làm lại đạt L3 (YYYY-MM-DD). "Tùy chọn" = khô
 | YC02 | Layer riêng | Image riêng boot trên board, có app, driver module và bản vá device tree | [roadmap](ROADMAP.md#theo-tháng) | 03/2027 | L0 | — | — |
 | YC03 | devtool & SDK | Sửa recipe bằng devtool; build app bằng SDK sinh từ image | [roadmap](ROADMAP.md#theo-tháng) | 03/2027 | L0 | — | — |
 | YC04 | Build tái hiện & license | Clean build lại cho cùng image (giải thích được khác biệt nếu có); liệt kê license của image | [roadmap](ROADMAP.md#theo-tháng) | 03/2027 | L0 | — | — |
+| YC05 | SBOM & CVE | Sinh SBOM (SPDX) và báo cáo CVE của image bằng công cụ của Yocto; xử lý một CVE | [roadmap](ROADMAP.md#theo-tháng) | 03/2027 | L0 | — | — |
 
 ### Power & thermal
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| PW01 | Regulator & power domain | Đọc regulator trong device tree; giải thích supply/consumer và thứ tự bật nguồn | [STM32MP257F-DK](hardware/boards/stm32mp257f-dk.md) | 02/2027 | L0 | — | — |
-| PW02 | Runtime PM & suspend | Driver hỗ trợ runtime PM; đo dòng trước và sau suspend | [roadmap](ROADMAP.md#theo-tháng) | 06/2027 | L0 | — | — |
+| PW01 | Regulator & power domain | Đọc regulator trong device tree; giải thích supply/consumer và thứ tự bật nguồn | [lab](linux-kernel/power-management/README.md) | 02/2027 | L0 | — | — |
+| PW02 | Runtime PM & suspend | Runtime PM cho driver LSM6DSOX; số đo dòng trước và sau | [lab](linux-kernel/power-management/README.md) | 06/2027 | L0 | — | — |
 | PW03 | cpufreq, cpuidle, thermal | Đọc thermal zone và trip point; đo nhiệt độ và điện năng khi chạy tải | [Jetson Nano](hardware/boards/jetson-nano.md) | 08/2027 | L0 | — | — |
 | PW04 | Power budget thiết bị chạy pin | Ước tính thời gian chạy pin từ dòng tiêu thụ đo được của từng khối | [design studies](docs/design-studies/README.md) | 05/2027 | L0 | — | — |
 
@@ -142,6 +157,7 @@ Cột Verified ghi ngày làm lại đạt L3 (YYYY-MM-DD). "Tùy chọn" = khô
 | NW08 | Service bằng Go | Service Go nhận dữ liệu IMU, có test, cross compile cho arm64 | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 04/2027 | L0 | — | — |
 | NW09 | Bluetooth LE | Giải thích GAP/GATT; quét và đọc một characteristic bằng bluetoothctl | — | Tùy chọn | L0 | — | — |
 | NW10 | Kết nối di động | ModemManager và AT command cơ bản | — | Tùy chọn | L0 | — | — |
+| NW11 | TCP cho latency thấp | Giải thích Nagle, delayed ACK, keepalive, socket buffer; đo ảnh hưởng của TCP_NODELAY | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 04/2027 | L0 | — | — |
 
 ### Camera & video
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
@@ -151,7 +167,7 @@ Cột Verified ghi ngày làm lại đạt L3 (YYYY-MM-DD). "Tùy chọn" = khô
 | VD03 | H.264 | Giải thích I/P/B frame, GOP, CBR/VBR; đo bitrate và chất lượng với hai cấu hình | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 05/2027 | L0 | — | — |
 | VD04 | GStreamer | Pipeline capture → encode phần cứng → mux; debug bằng GST_DEBUG | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 05/2027 | L0 | — | — |
 | VD05 | Ghi file chịu mất điện | Ghi segment hoặc fragmented MP4 để clip đã đóng không hỏng khi mất điện | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 05/2027 | L0 | — | — |
-| VD06 | Streaming RTP/RTSP | Stream video qua RTP; giải thích vì sao video thời gian thực hay dùng UDP | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 05/2027 | L0 | — | — |
+| VD06 | Streaming RTP/RTSP | Stream video qua RTP; giải thích vì sao video thời gian thực hay dùng UDP | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | Tùy chọn | L0 | — | — |
 | VD07 | Đồng bộ video và sensor | Timestamp video và dữ liệu IMU đồng bộ, có số đo sai lệch | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 05/2027 | L0 | — | — |
 
 ### Reliability & update
@@ -197,12 +213,27 @@ Cột Verified ghi ngày làm lại đạt L3 (YYYY-MM-DD). "Tùy chọn" = khô
 | MC04 | RPMsg/OpenAMP | M33 gửi mẫu IMU lên Linux qua RPMsg; đo jitter lấy mẫu | [project](projects/stm32mp257f-dk_jetson-nano/README.md) | 06/2027 | L0 | — | — |
 | MC05 | Zephyr | Build ứng dụng Zephyr cho một board được hỗ trợ; đọc driver model | — | Tùy chọn | L0 | — | — |
 
+### Debugging
+| ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| DB01 | Debug drills | 12 drill có bản ghi root cause, mỗi tầng ít nhất hai drill | [debug drills](debug-drills/README.md) | 06/2027 | L0 | — | — |
+| DB02 | JTAG/SWD với OpenOCD | Dừng Cortex-M33 tại breakpoint và tại fault qua ST-LINK | [Cortex-M faults](arm-architecture/cortex-m-faults/README.md) | 06/2027 | L0 | — | — |
+| DB03 | git bisect & regression | Tìm commit gây regression bằng git bisect chạy script tự động | [debug drills](debug-drills/README.md) | 02/2027 | L0 | — | — |
+
+### AI-assisted engineering
+| ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| AI01 | Spec trước khi dùng AI | Spec một trang có acceptance criteria đo được cho từng component của project, viết trước khi nhờ AI | [AI-assisted engineering](docs/ai-assisted-engineering.md) | 12/2026 | L0 | — | — |
+| AI02 | Kiểm chứng code AI với datasheet | Bảng register do AI sinh được đối chiếu từng bit; sai lệch ghi vào AI error log | [lab](hardware/register-programming/README.md) | 12/2026 | L0 | — | — |
+| AI03 | Kiểm chứng bằng test | Code do AI viết có test normal/boundary/error, sanitizer và chạy trên board trước khi merge | [AI-assisted engineering](docs/ai-assisted-engineering.md) | 01/2027 | L0 | — | — |
+| AI04 | Mini project cùng AI | Mỗi tháng một mini project 90 phút; review từng dòng, lỗi của AI có trong log | [livecoding](livecoding/README.md#mini-project-90-phút-cùng-ai--mỗi-tháng) | 06/2027 | L0 | — | — |
+| AI05 | Khuôn mẫu lỗi của AI | AI error log có ≥ 10 mục và khuôn mẫu theo tháng; checklist review được cập nhật từ đó | [AI error log](docs/ai-error-log.md) | 06/2027 | L0 | — | — |
+
 ### Algorithms & timed coding
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| AL01 | LeetCode | 100 bài Easy–Medium, ít nhất 30 bài Verified | [leetcode](leetcode/README.md) | 06/2027 | L0 | — | — |
-| AL02 | Live coding embedded C | 20 bài, mỗi bài đạt ≥ 11/14 không gợi ý | [livecoding](livecoding/README.md) | 06/2027 | L0 | — | — |
-| AL03 | Mini project cùng AI | Mỗi tháng một mini project 90 phút; lỗi của AI ghi vào AI error log | [livecoding](livecoding/README.md#mini-project-90-phút-cùng-ai--mỗi-tháng) | 06/2027 | L0 | — | — |
+| AL01 | LeetCode | 60 bài pattern cốt lõi, ít nhất 30 bài Verified | [leetcode](leetcode/README.md) | 06/2027 | L0 | — | — |
+| AL02 | Live coding embedded C | 15 bài, mỗi bài đạt ≥ 11/14 không gợi ý | [livecoding](livecoding/README.md) | 06/2027 | L0 | — | — |
 
 ### Design & communication
 | ID | Topic | Verify — làm được | Nơi làm | Dự kiến | Level | Verified | Evidence |
@@ -213,5 +244,5 @@ Cột Verified ghi ngày làm lại đạt L3 (YYYY-MM-DD). "Tùy chọn" = khô
 | DS04 | Thiết kế: đồng bộ thời gian giữa nhiều thiết bị | Design doc: nguồn thời gian, sai số, gắn sự kiện giữa các thiết bị | [design studies](docs/design-studies/README.md) | 05/2027 | L0 | — | — |
 | DS05 | ADR | 10 ADR có bối cảnh, phương án, số đo | [ADR](docs/adr/README.md) | 06/2027 | L0 | — | — |
 | DS06 | Debug journal | 30 bản ghi root cause, ít nhất 10 bản có ảnh logic analyzer | [debug journal](debug-logs/README.md) | 06/2027 | L0 | — | — |
-| DS07 | Viết kỹ thuật tiếng Anh | 20 bài viết, có link evidence | [write-ups](docs/writeups/README.md) | 06/2027 | L0 | — | — |
+| DS07 | Viết kỹ thuật tiếng Anh | 12 bài viết (khoảng một bài mỗi tháng), có link evidence | [write-ups](docs/writeups/README.md) | 06/2027 | L0 | — | — |
 | DS08 | Trình bày tiếng Anh | Giải thích trong 5 phút luồng boot và đường đi một mẫu dữ liệu, không đọc ghi chú | [workflow](WORKFLOW.md#nhịp-học-hằng-tuần) | 12/2026 | L0 | — | — |

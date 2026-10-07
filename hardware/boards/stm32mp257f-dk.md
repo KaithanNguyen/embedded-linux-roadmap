@@ -36,7 +36,7 @@ Firmware Cortex-M33 được load qua remoteproc (hoặc chạy trước, tùy f
 ## Bring-up checklist (11/2026)
 Bám theo [kế hoạch tuần](../../sprints/README.md#q42026).
 
-Tuần 02–08/11 — boot:
+Tuần 02–08/11 — boot ([lab](../../linux-kernel/boot-chain/README.md)):
 - [ ] Ghi board revision, ecosystem version, image đã flash + checksum.
 - [ ] Flash Starter Package vào microSD bằng STM32CubeProgrammer; ghi version + lệnh.
 - [ ] Đặt boot switch cho microSD; ghi vị trí switch hoặc chụp ảnh.
@@ -45,15 +45,15 @@ Tuần 02–08/11 — boot:
 - [ ] Login, chạy `system_report.sh` của [sprint 01](../../sprints/2026-10-05_linux-workstation/scripts/README.md) trên board; so sánh host vs target.
 - [ ] Network: lấy IP, ping host, SSH; ghi cách cấu hình.
 
-Tuần 09–15/11 — SDK:
+Tuần 09–15/11 — SDK ([lab](../../linux-system/cross-toolchain/README.md)):
 - [ ] Cài Developer Package; cross compile app; ghi output `file <binary>`; chạy trên board.
 - [ ] Debug từ xa bằng gdbserver trên board + gdb-multiarch trên host.
 
-Tuần 16–22/11 — U-Boot:
+Tuần 16–22/11 — U-Boot ([lab](../../linux-kernel/u-boot/README.md)):
 - [ ] Boot kernel thủ công từ dấu nhắc U-Boot; đổi bootargs.
 - [ ] Bảng thời gian boot từng giai đoạn.
 
-Tuần 23–29/11 — device tree:
+Tuần 23–29/11 — device tree ([device tree](../../linux-kernel/device-tree/README.md), [kernel build](../../linux-kernel/kernel-build/README.md)):
 - [ ] Kernel + DTB tự build chạy trên board.
 - [ ] LED và nút bấm khai báo qua device tree; logic analyzer chụp tín hiệu GPIO.
 
