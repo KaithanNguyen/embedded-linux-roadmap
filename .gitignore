@@ -26,7 +26,8 @@ vgcore.*
 tmp/
 downloads/
 sstate-cache/
-build-*/
+# OpenSTLinux build directories (build-<distro>-<machine>); keep the pattern narrow so lab folders are not ignored
+build-openstlinux*/
 Linux_for_Tegra/
 # Private local configuration
 .env

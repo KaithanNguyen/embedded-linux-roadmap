@@ -136,6 +136,27 @@ def exists_exact(path: Path) -> bool:
     return True
 
 
+@functools.lru_cache(maxsize=None)
+def repo_paths() -> frozenset[str]:
+    """Files and directories that will exist in a fresh clone (git-ignored paths excluded)."""
+    paths: set[str] = set()
+    for path in repo_files():
+        parts = path.relative_to(ROOT).parts
+        for end in range(1, len(parts) + 1):
+            paths.add("/".join(parts[:end]))
+    return frozenset(paths)
+
+
+def in_repo(path: Path) -> bool:
+    """True when the path is part of the repository, not just present on this disk."""
+    absolute = Path(os.path.normpath(os.path.abspath(path)))
+    try:
+        relative = absolute.relative_to(ROOT).as_posix()
+    except ValueError:
+        return False
+    return relative == "." or relative in repo_paths()
+
+
 def link_targets(source: Path, text: str):
     """Yield (line, url, target, anchor) for every internal link in markdown text."""
     for match in LINK.finditer(text):
@@ -193,7 +214,7 @@ def report_result(report: Path) -> tuple[bool, bool]:
     """(has a Pass/Fail row, has an existing evidence link) in the Results section."""
     block = section(read(report), "Results")
     executed = any(cell in ("Pass", "Fail") for row in table_rows(block)[1:] for cell in row)
-    linked = any(exists_exact(target) for _, _, target, _ in link_targets(report, blank_code(block)))
+    linked = any(exists_exact(t) and in_repo(t) for _, _, t, _ in link_targets(report, blank_code(block)))
     return executed, linked
 
 
@@ -203,6 +224,8 @@ def check_links(errors: list[str]) -> int:
         for line, url, target, anchor in link_targets(md, blank_code(read(md))):
             if not exists_exact(target):
                 errors.append(f"{rel(md)}:{line}: broken link '{url}'")
+            elif not in_repo(target):
+                errors.append(f"{rel(md)}:{line}: link target is ignored by git and will be missing from the repository: '{url}'")
             elif anchor and target.suffix == ".md" and anchor not in anchors(target.resolve()):
                 errors.append(f"{rel(md)}:{line}: missing anchor '{url}'")
     return len(markdown)
@@ -294,7 +317,7 @@ def check_tracking(errors: list[str], warnings: list[str]) -> list[Topic]:
             else:
                 if verified > TODAY:
                     errors.append(f"{where} Verified date is in the future")
-        evidence = [t for _, _, t, _ in link_targets(base, blank_code(topic.evidence)) if exists_exact(t)]
+        evidence = [t for _, _, t, _ in link_targets(base, blank_code(topic.evidence)) if exists_exact(t) and in_repo(t)]
         if topic.rank >= 2:
             if not evidence:
                 errors.append(f"{where} {topic.level} needs an existing evidence link")
